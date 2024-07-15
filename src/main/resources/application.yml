@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: DARAM-server-V1
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB-URL}
+    username: ${DB-USERNAME}
+    password: ${DB-PASSWORD}
+  jpa:
+    hibernate: ddl-auto:update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+server:
+  port: 5000
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+  file:
+    path: /src/main/resources/log
