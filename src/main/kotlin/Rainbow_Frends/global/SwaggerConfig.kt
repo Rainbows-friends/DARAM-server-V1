@@ -11,4 +11,10 @@ class SwaggerConfig {
         return GroupedOpenApi.builder().group("times").pathsToMatch("/times/**")
             .packagesToScan("Rainbow_Frends.domain.times").build()
     }
+
+    @Bean
+    fun gauthApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder().group("GAuth").pathsToMatch("/user/**")
+            .packagesToScan("Rainbow_Frends.domain.GAuth").build()
+    }
 }
