@@ -16,6 +16,10 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  security:
+    user:
+      name: admin
+      password: 1234
 server:
   port: 5000
 logging:
@@ -24,3 +28,8 @@ logging:
     org.springframework.web: DEBUG
   file:
     path: /src/main/resources/log
+gauth:
+  security:
+    client-id: ${GAuth-CLIENT-ID}
+    client-secret: ${GAuth-CLIENT-SECRET}
+    redirect-uri: ${GAuth-REDIRECT-URI}
