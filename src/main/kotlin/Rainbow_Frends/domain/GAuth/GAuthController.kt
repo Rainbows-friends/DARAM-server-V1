@@ -28,7 +28,7 @@ class GAuthUserController(private val gauthRepository: GAuthRepository) {
 
     @GetMapping("/page")
     fun redirect(): String {
-        return "test"
+        return "RemainTimeAPI"
     }
 
     @Operation(summary = "GAuthUserEntity 값 확인", description = "현재 인증된 사용자의 GAuthUserEntity값 확인")
