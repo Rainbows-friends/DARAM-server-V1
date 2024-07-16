@@ -7,22 +7,23 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-        }
-
-        .container {
-            margin: 50px;
+            text-align: center;
+            margin-top: 50px;
         }
 
         .time {
             font-size: 2em;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>남은 시간 조회</h1>
-    <button id="fetchTimeButton">남은 시간 가져오기</button>
-    <div class="time" id="time">버튼을 눌러 시간을 불러오세요.</div>
+<h1>남은 시간 조회</h1>
+<button id="fetchTimeButton">남은 시간 가져오기</button>
+<div class="time" id="time">
+    <span id="hours">--</span> 시
+    <span id="minutes">--</span> 분
+    <span id="seconds">--</span> 초
 </div>
 <script src="/static/js/RemainTimeAPI.js"></script>
 </body>

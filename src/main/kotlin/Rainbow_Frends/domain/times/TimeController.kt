@@ -18,7 +18,7 @@ class TimeController {
     @Operation(summary = "입실 남은 시간 조회", description = "입실 마감까지 남은 시간 조회 API")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/remaintime")
-    fun remainTime(): Response<TimeRemaining> {
+    fun remainTime(): Response<TimeResponse> {
         val nowTime = LocalDateTime.now()
         println("test:: $nowTime")
         val limitTime = LocalDateTime.of(nowTime.year, nowTime.month, nowTime.dayOfMonth, 21, 30, 0)
@@ -27,7 +27,7 @@ class TimeController {
         val hoursUntilLimit = duration.toHours()
         val minutesUntilLimit = duration.toMinutes() % 60
         val secondsUntilLimit = duration.seconds % 60
-        val remaining = TimeRemaining(hoursUntilLimit, minutesUntilLimit, secondsUntilLimit)
+        val remaining = TimeResponse(hoursUntilLimit, minutesUntilLimit, secondsUntilLimit)
         return Response("성공", "남은 시간 조회 성공", remaining)
     }
 }
