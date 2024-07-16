@@ -1,7 +1,7 @@
 package Rainbow_Frends.global
 
 import CustomAuthenticationSuccessHandler
-import JwtAuthenticationFilter
+import Rainbow_Frends.domain.GAuth.JWT.JwtAuthenticationFilter
 import dev.yangsijun.gauth.configurer.GAuthLoginConfigurer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -19,10 +19,11 @@ class SecurityConfig(
         gauth.loginPageUrl("/gauth/authorization").successHandler(CustomAuthenticationSuccessHandler()).configure(http)
 
         http.csrf { it.disable() }.cors { it.disable() }.authorizeHttpRequests { request ->
-                request.requestMatchers("/gauth/authorization", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                    .requestMatchers("/role/student").hasAuthority("ROLE_STUDENT").requestMatchers("/role/teacher")
-                    .hasAuthority("ROLE_TEACHER").anyRequest().denyAll()
-            }.addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+            request.requestMatchers(
+                "/gauth/authorization", "/swagger-ui/**", "/v3/api-docs/**", "/page", "/times/**"
+            ).permitAll().requestMatchers("/role/student").hasAuthority("ROLE_STUDENT").requestMatchers("/role/teacher")
+                .hasAuthority("ROLE_TEACHER").anyRequest().denyAll()
+        }.addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
     }

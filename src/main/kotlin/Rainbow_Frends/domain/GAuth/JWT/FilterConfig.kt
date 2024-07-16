@@ -1,6 +1,5 @@
 package Rainbow_Frends.domain.GAuth.JWT
 
-import JwtAuthenticationFilter
 import Rainbow_Frends.domain.GAuth.GAuthRepository
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
