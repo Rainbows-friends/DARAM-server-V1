@@ -20,7 +20,9 @@ class SecurityConfig(private val gauth: GAuthLoginConfigurer<HttpSecurity>) {
                         "/move/login/code/gauth",
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
-                        "/page"
+                        "/page",
+                        "/times/remaintime",
+                        "/test/**"
                     ).permitAll().requestMatchers("/auth/me").authenticated().requestMatchers("/role/student")
                     .hasAuthority("GAUTH_ROLE_STUDENT").requestMatchers("/role/teacher")
                     .hasAuthority("GAUTH_ROLE_TEACHER").anyRequest().denyAll()
