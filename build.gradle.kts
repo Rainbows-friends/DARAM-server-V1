@@ -32,6 +32,7 @@ dependencies {
     implementation("com.github.YangSiJun528:GAuth-spring-boot-starter:3.0.0")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+    implementation ("org.springframework.boot:spring-boot-starter-webflux")
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     implementation ("org.springframework.boot:spring-boot-starter-tomcat")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")

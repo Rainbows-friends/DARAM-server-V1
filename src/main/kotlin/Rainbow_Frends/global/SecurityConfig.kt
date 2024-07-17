@@ -20,7 +20,7 @@ class SecurityConfig(
 
         http.csrf { it.disable() }.cors { it.disable() }.authorizeHttpRequests { request ->
             request.requestMatchers(
-                "/gauth/authorization", "/swagger-ui/**", "/v3/api-docs/**", "/page", "/times/**"
+                "/gauth/authorization", "/swagger-ui/**", "/v3/api-docs/**"
             ).permitAll().requestMatchers("/role/student").hasAuthority("ROLE_STUDENT").requestMatchers("/role/teacher")
                 .hasAuthority("ROLE_TEACHER").anyRequest().denyAll()
         }.addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)

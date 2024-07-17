@@ -4,13 +4,15 @@ import dev.yangsijun.gauth.core.user.GAuthUser
 import dev.yangsijun.gauth.userinfo.DefaultGAuthUserService
 import dev.yangsijun.gauth.userinfo.GAuthAuthorizationRequest
 import dev.yangsijun.gauth.userinfo.GAuthUserService
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.reactive.function.BodyInserters
+import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 
 @Service
-class GAuthService @Autowired constructor(
-    private val gAuthRepository: GAuthRepository
+class GAuthService(
+    private val gAuthRepository: GAuthRepository, private val webClientBuilder: WebClient.Builder
 ) : GAuthUserService<GAuthAuthorizationRequest, GAuthUser> {
 
     private val delegatingService: GAuthUserService<GAuthAuthorizationRequest, GAuthUser> = DefaultGAuthUserService()
@@ -52,12 +54,10 @@ class GAuthService @Autowired constructor(
         )
     }
 
-    private fun accessCode(url: String): Int {
-        val temp1=url.split("/").toString()
-        var temp2=temp1.split("/").toString()
-        temp2=temp2.split("/").toString()
-        temp2.split("?").toString()
-        temp2
-        //https://gauth.co.kr/e5ce3a12484e4a43bc9ac3aee94fdae1 <--이거 보고 API 요청 계속 하기
+    fun fetchAccessToken(code: String): Mono<String> {
+        val apiUrl = "https://server.gauth.co.kr/oauth/token"
+
+        return webClientBuilder.build().post().uri(apiUrl).contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .body(BodyInserters.fromFormData("code", code)).retrieve().bodyToMono(String::class.java)
     }
 }
