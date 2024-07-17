@@ -11,9 +11,4 @@ class MVCController {
     fun testremaintime(): String {
         return "RemainTimeAPI"
     }
-
-    @GetMapping("/page")
-    fun redirect(): String {
-        return "RemainTimeAPI"
-    }
 }
