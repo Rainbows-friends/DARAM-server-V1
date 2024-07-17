@@ -2,6 +2,8 @@ package Rainbow_Frends.domain.GAuth
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.servlet.http.HttpServletRequest
+import Rainbow_Frends.domain.GAuth.GAuthService.assces
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
@@ -9,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "GAuth", description = "GAuth API")
 @RestController
-class GAuthUserController(private val gauthRepository: GAuthRepository) {
+class GAuthUserController(private val gauthRepository: GAuthRepository, private val request: HttpServletRequest) {
     @GetMapping("/role/student")
     fun student(): String {
         return "hi student!"
@@ -28,6 +30,8 @@ class GAuthUserController(private val gauthRepository: GAuthRepository) {
 
     @GetMapping("/page")
     fun redirect(): String {
+        val URL = request.requestURL.toString()
+        assessCode
         return "RemainTimeAPI"
     }
 

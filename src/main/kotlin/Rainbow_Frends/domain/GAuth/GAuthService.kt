@@ -6,6 +6,7 @@ import dev.yangsijun.gauth.userinfo.GAuthAuthorizationRequest
 import dev.yangsijun.gauth.userinfo.GAuthUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.RequestParam
 
 @Service
 class GAuthService @Autowired constructor(
@@ -49,5 +50,14 @@ class GAuthService @Autowired constructor(
             num = num,
             role = role
         )
+    }
+
+    private fun accessCode(url: String): Int {
+        val temp1=url.split("/").toString()
+        var temp2=temp1.split("/").toString()
+        temp2=temp2.split("/").toString()
+        temp2.split("?").toString()
+        temp2
+        //https://gauth.co.kr/e5ce3a12484e4a43bc9ac3aee94fdae1 <--이거 보고 API 요청 계속 하기
     }
 }
