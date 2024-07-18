@@ -1,4 +1,4 @@
-package Rainbow_Frends.domain.GAuth
+package Rainbow_Frends.global.GAuth
 
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue

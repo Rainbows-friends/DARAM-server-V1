@@ -1,4 +1,4 @@
-package Rainbow_Frends.domain.GAuth.JWT
+package Rainbow_Frends.global.GAuth.JWT
 
 import Rainbow_Frends.domain.GAuth.JWT.JwtProperties.ACCESS_SECRET
 import io.jsonwebtoken.Claims

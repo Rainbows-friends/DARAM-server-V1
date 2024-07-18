@@ -1,4 +1,4 @@
-package Rainbow_Frends.domain.GAuth.JWT
+package Rainbow_Frends.global.GAuth.JWT
 
 import io.jsonwebtoken.security.Keys
 import java.nio.charset.StandardCharsets

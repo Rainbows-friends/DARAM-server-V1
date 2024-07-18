@@ -1,4 +1,4 @@
-package Rainbow_Frends.domain.GAuth.JWT
+package Rainbow_Frends.global.GAuth.JWT
 
 import dev.yangsijun.gauth.core.user.GAuthUser
 import org.springframework.security.core.GrantedAuthority
@@ -27,4 +27,5 @@ class CustomGAuthUser(
     override fun <A : Any?> getAttribute(name: String): A? {
         return if (name == "id") id as A else null
     }
+
 }

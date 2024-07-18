@@ -1,9 +1,10 @@
-package Rainbow_Frends.domain.GAuth.JWT
+package Rainbow_Frends.global.GAuth.JWT
 
 import Rainbow_Frends.domain.GAuth.GAuthRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.LoggerFactory
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
@@ -15,6 +16,8 @@ class JwtAuthenticationFilter(
     private val gauthRepository: GAuthRepository
 ) : OncePerRequestFilter() {
 
+    private val logger = LoggerFactory.getLogger(JwtAuthenticationFilter::class.java)
+
     override fun doFilterInternal(
         request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain
     ) {
@@ -25,24 +28,23 @@ class JwtAuthenticationFilter(
             if (userId != null) {
                 val gauthUser = gauthRepository.findById(userId.toLong())
                     .orElseThrow { IllegalArgumentException("요청한 사용자 ID와 일치하는 사용자를 찾을 수 없습니다") }
-                val authentication =
-                    gauthUser.id?.let { gauthUser.role?.let { it1 -> CustomGAuthUser(it, it1) } }?.let {
-                        CustomAuthenticationToken(
-                            listOf(SimpleGrantedAuthority(gauthUser.role)), it
-                        )
-                    }
-                if (authentication != null) {
+                if (gauthUser.id != null && gauthUser.role != null) {
+                    val authentication = CustomAuthenticationToken(
+                        listOf(SimpleGrantedAuthority(gauthUser.role)), CustomGAuthUser(gauthUser.id, gauthUser.role)
+                    )
                     authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
+                    SecurityContextHolder.getContext().authentication = authentication
+                    logger.info("JWT Filter: 인증 성공 - 사용자 ID: $userId")
+
+                } else {
+                    logger.warn("JWT Filter: 사용자 ID나 역할이 null입니다.")
                 }
-                SecurityContextHolder.getContext().authentication = authentication
-                println("JWT Filter: 인증 성공 - 사용자 ID: $userId")
             } else {
-                println("JWT Filter: 유효하지 않은 JWT 토큰")
+                logger.warn("JWT Filter: 유효하지 않은 JWT 토큰")
             }
         } else {
-            println("JWT Filter: JWT 토큰이 없음 또는 잘못된 형식")
+            logger.warn("JWT Filter: JWT 토큰이 없음 또는 잘못된 형식")
         }
-
         filterChain.doFilter(request, response)
     }
 }

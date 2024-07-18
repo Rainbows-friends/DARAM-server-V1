@@ -1,8 +1,7 @@
-package Rainbow_Frends.domain.GAuth
+package Rainbow_Frends.global.GAuth
 
 import gauth.GAuth
 import gauth.GAuthToken
-import Rainbow_Frends.domain.GAuth.config.GAuthConfig.Component
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,7 +11,6 @@ class GAuthService(private val gAuth: GAuth) {
     val redirectURI = "https://localhost:5000/page"
     fun fetchAccessToken(code: String): Unit {
         val accass_token:GAuthToken=gAuth.generateToken(code, ClientID, ClientSecret, redirectURI)
-
         println(accass_token)
     }
 }

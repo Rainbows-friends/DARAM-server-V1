@@ -1,4 +1,4 @@
-package Rainbow_Frends.domain.GAuth.JWT
+package Rainbow_Frends.global.GAuth.JWT
 
 import dev.yangsijun.gauth.core.user.GAuthUser
 import org.springframework.security.authentication.AbstractAuthenticationToken
@@ -13,7 +13,11 @@ class CustomAuthenticationToken(
     }
 
     override fun getCredentials(): Long? {
-        return principal.getAttribute<Long>("id")
+        return try {
+            principal.getAttribute<Long>("id")
+        } catch (e: Exception) {
+            null
+        }
     }
 
     override fun getPrincipal(): GAuthUser {

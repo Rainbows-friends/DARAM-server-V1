@@ -1,4 +1,4 @@
-package Rainbow_Frends.domain.GAuth
+package Rainbow_Frends.global.GAuth
 
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository

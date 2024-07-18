@@ -1,4 +1,4 @@
-package Rainbow_Frends.domain.GAuth
+package Rainbow_Frends.global.GAuth
 
 import gauth.GAuth
 import io.swagger.v3.oas.annotations.Operation
