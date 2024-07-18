@@ -1,7 +1,7 @@
 package Rainbow_Frends.global
 
-import Rainbow_Frends.domain.GAuth.JWT.CustomAuthenticationSuccessHandler
-import Rainbow_Frends.domain.GAuth.JWT.JwtAuthenticationFilter
+import Rainbow_Frends.global.GAuth.JWT.CustomAuthenticationSuccessHandler
+import Rainbow_Frends.global.GAuth.JWT.JwtAuthenticationFilter
 import dev.yangsijun.gauth.configurer.GAuthLoginConfigurer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

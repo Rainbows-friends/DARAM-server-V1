@@ -1,6 +1,6 @@
 package Rainbow_Frends.global.GAuth.JWT
 
-import Rainbow_Frends.domain.GAuth.GAuthRepository
+import Rainbow_Frends.global.GAuth.GAuthRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse

@@ -1,6 +1,6 @@
 package Rainbow_Frends.global.GAuth.JWT
 
-import Rainbow_Frends.domain.GAuth.JWT.JwtProperties.ACCESS_SECRET
+import Rainbow_Frends.global.GAuth.JWT.JwtProperties.ACCESS_SECRET
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
