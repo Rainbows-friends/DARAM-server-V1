@@ -8,6 +8,6 @@ object JwtProperties {
     const val HEADER: String = "Authorization"
     const val TOKEN_PREFIX: String = "Bearer "
     const val ACCESS_EXP: Int = 86400
-    const val ACCESS_SECRET_VALUE: String = "qwertyuiopasdfghjklzxcvbnm1234567890qwertyuiopasdfghjklzxcvbnm1234567890"
+    private val ACCESS_SECRET_VALUE: String = System.getenv("JWT-SECRET") ?: "default_secret_key"
     val ACCESS_SECRET: SecretKey = Keys.hmacShaKeyFor(ACCESS_SECRET_VALUE.toByteArray(StandardCharsets.UTF_8))
 }
