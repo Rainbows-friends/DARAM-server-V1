@@ -30,6 +30,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("com.github.YangSiJun528:GAuth-spring-boot-starter:3.0.0")
+    implementation("com.github.GSM-MSG:GAuth-SDK-Java:v3.0.0")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation ("org.springframework.boot:spring-boot-starter-webflux")

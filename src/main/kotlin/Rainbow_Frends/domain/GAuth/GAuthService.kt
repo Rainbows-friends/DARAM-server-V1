@@ -1,63 +1,18 @@
 package Rainbow_Frends.domain.GAuth
 
-import dev.yangsijun.gauth.core.user.GAuthUser
-import dev.yangsijun.gauth.userinfo.DefaultGAuthUserService
-import dev.yangsijun.gauth.userinfo.GAuthAuthorizationRequest
-import dev.yangsijun.gauth.userinfo.GAuthUserService
-import org.springframework.http.MediaType
+import gauth.GAuth
+import gauth.GAuthToken
+import Rainbow_Frends.domain.GAuth.config.GAuthConfig.Component
 import org.springframework.stereotype.Service
-import org.springframework.web.reactive.function.BodyInserters
-import org.springframework.web.reactive.function.client.WebClient
-import reactor.core.publisher.Mono
 
 @Service
-class GAuthService(
-    private val gAuthRepository: GAuthRepository, private val webClientBuilder: WebClient.Builder
-) : GAuthUserService<GAuthAuthorizationRequest, GAuthUser> {
+class GAuthService(private val gAuth: GAuth) {
+    val ClientID = "0906594b6e1a49138b79e5934eaddea575c580063a6844be92a6dcc76050a790"
+    val ClientSecret = "39bd0f9270d14cda89a55c54cbffbcb632c4f43b0e184fc1aa7ab5e5c801151d"
+    val redirectURI = "https://localhost:5000/page"
+    fun fetchAccessToken(code: String): Unit {
+        val accass_token:GAuthToken=gAuth.generateToken(code, ClientID, ClientSecret, redirectURI)
 
-    private val delegatingService: GAuthUserService<GAuthAuthorizationRequest, GAuthUser> = DefaultGAuthUserService()
-
-    override fun loadUser(userRequest: GAuthAuthorizationRequest): GAuthUser {
-        val gauthUser = delegatingService.loadUser(userRequest)
-        val email = gauthUser.getAttribute<String>("email")
-
-        email?.let {
-            gAuthRepository.findByEmail(it).orElseGet {
-                val entity = createEntity(gauthUser)
-                gAuthRepository.save(entity)
-            }
-        }
-
-        return gauthUser
-    }
-
-    private fun createEntity(gauthUser: GAuthUser): GAuth {
-        val profileUrl = gauthUser.getAttribute<String>("profileUrl")
-        val email = gauthUser.getAttribute<String>("email")
-        val name = gauthUser.getAttribute<String>("name")
-        val gender = gauthUser.getAttribute<String>("gender")
-        val grade = gauthUser.getAttribute<Int>("grade")
-        val classNum = gauthUser.getAttribute<Int>("classNum")
-        val num = gauthUser.getAttribute<Int>("num")
-        val role = gauthUser.getAttribute<String>("role")
-
-        return GAuth(
-            id = null,
-            profileUrl = profileUrl,
-            email = email,
-            name = name,
-            gender = gender,
-            grade = grade,
-            classNum = classNum,
-            num = num,
-            role = role
-        )
-    }
-
-    fun fetchAccessToken(code: String): Mono<String> {
-        val apiUrl = "https://server.gauth.co.kr/oauth/token"
-
-        return webClientBuilder.build().post().uri(apiUrl).contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .body(BodyInserters.fromFormData("code", code)).retrieve().bodyToMono(String::class.java)
+        println(accass_token)
     }
 }
