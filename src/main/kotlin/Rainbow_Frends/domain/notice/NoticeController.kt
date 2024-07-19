@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/notice")
 class NoticeController {
-    @Operation(summary = "공지 조회 API", description = "공지의 제목,글쓴이,본문 조회 API")
+    @Operation(summary = "공지 조회 API", description = "공지의 제목,글쓴이,본문,작성시각 조회 API")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     fun read(){
