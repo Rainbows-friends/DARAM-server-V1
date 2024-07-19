@@ -1,6 +1,9 @@
 package Rainbow_Frends.global.GAuth
 
+import Rainbow_Frends.global.GAuth.JWT.TokenGenerator
+import Rainbow_Frends.global.GAuth.JWT.TokenResponse
 import gauth.GAuth
+import gauth.GAuthToken
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.core.Authentication
@@ -30,14 +33,24 @@ class GAuthUserController(private val gauthRepository: GAuthRepository, private 
     }
 
     @GetMapping("/page")
-    fun redirect(@RequestParam code: String): String {
-        GAuthService(gAuth).fetchAccessToken(code)
-        return "Sfsf"
+    fun redirect(@RequestParam code: String): TokenResponse {
+        val gAuthToken: GAuthToken = gAuth.generateToken(
+            code,
+            System.getenv("GAuth-Client-ID"),
+            System.getenv("GAuth-Client-Secret"),
+            System.getenv("GAuth-Redirect-URI")
+        )
+        val grade = gAuth.getUserInfo(gAuthToken.accessToken).grade
+        val classNum = gAuth.getUserInfo(gAuthToken.accessToken).classNum
+        val num = gAuth.getUserInfo(gAuthToken.accessToken).num
+        val studentId = grade.toString() + classNum.toString() + num.toString()
+        val tokenResponse = TokenGenerator.generateToken(studentId.toLong())
+        return tokenResponse
     }
 
     @Operation(summary = "GAuthUserEntity 값 확인", description = "현재 인증된 사용자의 GAuthUserEntity값 확인")
     @GetMapping("/user/me")
-    fun userMe(): Rainbow_Frends.global.GAuth.GAuth? {
+    fun userMe(): GAuth? {
         val auth: Authentication = SecurityContextHolder.getContext().authentication
         val email: String = auth.name
         return gauthRepository.findByEmail(email).orElseThrow { RuntimeException("entity를 찾을 수 없습니다.") }
