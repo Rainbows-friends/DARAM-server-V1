@@ -50,7 +50,7 @@ class GAuthUserController(private val gauthRepository: GAuthRepository, private 
 
     @Operation(summary = "GAuthUserEntity 값 확인", description = "현재 인증된 사용자의 GAuthUserEntity값 확인")
     @GetMapping("/user/me")
-    fun userMe(): GAuth? {
+    fun userMe(): Rainbow_Frends.global.GAuth.GAuth? {
         val auth: Authentication = SecurityContextHolder.getContext().authentication
         val email: String = auth.name
         return gauthRepository.findByEmail(email).orElseThrow { RuntimeException("entity를 찾을 수 없습니다.") }
