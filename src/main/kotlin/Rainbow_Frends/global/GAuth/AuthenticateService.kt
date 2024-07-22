@@ -1,5 +1,5 @@
-package Rainbow_Frends.global.GAuth
+package Rainbow_Frends.global.GAuth.auth.service
 
 interface AuthenticateService {
-    open fun getAccessToken(authorizationCode: String?): String?
+    fun getAccessToken(authorizationCode: String): String
 }

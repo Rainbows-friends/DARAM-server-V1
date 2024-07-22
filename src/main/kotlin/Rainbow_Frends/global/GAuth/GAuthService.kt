@@ -1,44 +1,23 @@
 package Rainbow_Frends.global.GAuth
 
-import Rainbow_Frends.global.GAuth.JWT.JwtAuthenticationFilter
-import gauth.GAuth
-import gauth.GAuthToken
-import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
+import Rainbow_Frends.global.GAuth.JWT.JWTUtil
+import Rainbow_Frends.global.User.UserService
+import gauth.GAuthUserInfo
 import org.springframework.stereotype.Service
 
 @Service
-class GAuthService(private val gAuth: GAuth) : AuthenticateService {
-    private val logger = LoggerFactory.getLogger(JwtAuthenticationFilter::class.java)
+class GauthService(
+    private val jwtUtil: JWTUtil,
+    private val userService: UserService
+) {
 
-    @Value("\${GAuth-CLIENT-ID}")
-    private val clientId: String? = null
-
-    @Value("\${GAuth-CLIENT-SECRET}")
-    private val clientSecret: String? = null
-
-    @Value("\${GAuth-REDIRECT-URI}")
-    private val redirectUrl: String? = null
-
-    override fun getAccessToken(authorizationCode: String?): String? {
-        if (authorizationCode == null) {
-            logger.warn("authorizationCode 오류: 값이 null입니다")
-            throw IllegalArgumentException("Authorization code is null")
-        }
-
-        val token: GAuthToken = gAuth.generateToken(
-            authorizationCode, clientId, clientSecret, redirectUrl
-        )
-        return token.accessToken
+    fun loginWithGauth(accessCode: String): GAuthUserInfo {
+        // GAuth 로그인 로직
+        // 여기는 placeholder입니다. 실제 GAuth 로그인 로직으로 대체하세요.
+        return userService.findByAccessCode(accessCode)
     }
 
-    fun getUserInfoByCode(accessCode: String): Any {
-        val accessToken: String? = getAccessToken(accessCode)
-        if (accessToken != null) {
-            return gAuth.getUserInfo(accessToken)
-        } else {
-            logger.warn("accessCode 오류: 값이 null입니다")
-            throw IllegalArgumentException("Access code is invalid or null")
-        }
+    fun createToken(user: GAuthUserInfo): String {
+        return jwtUtil.createJwt(user.name, user.id, 86400000L)
     }
 }

@@ -15,8 +15,7 @@ class JWTUtil(@Value("\${jwt.secret}") secret: String) {
         SecretKeySpec(secret.toByteArray(StandardCharsets.UTF_8), SignatureAlgorithm.HS256.jcaName)
 
     fun getUsername(token: String): String? {
-        return Jwts.parserBuilder().setSigningKey(secretKey).build()
-            .parseClaimsJws(token).body["username", String::class.java]
+        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).body.subject
     }
 
     fun getUserId(token: String): Long? {
@@ -30,8 +29,7 @@ class JWTUtil(@Value("\${jwt.secret}") secret: String) {
     }
 
     fun createJwt(username: String, userId: Long, expiredMs: Long): String {
-        return Jwts.builder().claim("username", username).claim("userId", userId)
-            .setIssuedAt(Date(System.currentTimeMillis())).setExpiration(Date(System.currentTimeMillis() + expiredMs))
-            .signWith(secretKey).compact()
+        return Jwts.builder().setSubject(username).claim("userId", userId).setIssuedAt(Date())
+            .setExpiration(Date(System.currentTimeMillis() + expiredMs)).signWith(secretKey).compact()
     }
 }

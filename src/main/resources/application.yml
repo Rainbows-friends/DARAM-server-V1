@@ -44,3 +44,5 @@ gauth:
 GAuth-CLIENT-ID: ${GAuth-CLIENT-ID}
 GAuth-CLIENT-SECRET: ${GAuth-CLIENT-SECRET}
 GAuth-REDIRECT-URI: ${GAuth-REDIRECT-URI}
+jwt:
+  secret: ${JWT-SECRET}
