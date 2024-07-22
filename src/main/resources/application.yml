@@ -41,3 +41,6 @@ gauth:
     client-id: ${GAuth-CLIENT-ID}
     client-secret: ${GAuth-CLIENT-SECRET}
     redirect-uri: ${GAuth-REDIRECT-URI}
+GAuth-CLIENT-ID: ${GAuth-CLIENT-ID}
+GAuth-CLIENT-SECRET: ${GAuth-CLIENT-SECRET}
+GAuth-REDIRECT-URI: ${GAuth-REDIRECT-URI}

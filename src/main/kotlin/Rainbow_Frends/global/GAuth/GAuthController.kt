@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RestController
 
 @Tag(name = "GAuth", description = "GAuth API")
 @RestController
-class GAuthUserController(private val gauthRepository: GAuthRepository, private val gAuth: GAuth) {
+class GAuthUserController(
+    private val gauthRepository: GAuthRepository,
+    private val gAuth: GAuth,
+    private val gauth: GAuth
+) {
 
     @GetMapping("/role/student")
     fun student(): String {

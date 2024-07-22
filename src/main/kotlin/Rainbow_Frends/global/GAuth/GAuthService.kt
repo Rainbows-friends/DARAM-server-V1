@@ -1,16 +1,44 @@
 package Rainbow_Frends.global.GAuth
 
+import Rainbow_Frends.global.GAuth.JWT.JwtAuthenticationFilter
 import gauth.GAuth
 import gauth.GAuthToken
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 
 @Service
-class GAuthService(private val gAuth: GAuth) {
-    val ClientID = "0906594b6e1a49138b79e5934eaddea575c580063a6844be92a6dcc76050a790"
-    val ClientSecret = "39bd0f9270d14cda89a55c54cbffbcb632c4f43b0e184fc1aa7ab5e5c801151d"
-    val redirectURI = "https://localhost:5000/page"
-    fun fetchAccessToken(code: String): Unit {
-        val accass_token: GAuthToken = gAuth.generateToken(code, ClientID, ClientSecret, redirectURI)
-        println(accass_token)
+class GAuthService(private val gAuth: GAuth) : AuthenticateService {
+    private val logger = LoggerFactory.getLogger(JwtAuthenticationFilter::class.java)
+
+    @Value("\${GAuth-CLIENT-ID}")
+    private val clientId: String? = null
+
+    @Value("\${GAuth-CLIENT-SECRET}")
+    private val clientSecret: String? = null
+
+    @Value("\${GAuth-REDIRECT_URI}")
+    private val redirectUrl: String? = null
+
+    override fun getAccessToken(authorizationCode: String?): String? {
+        if (authorizationCode == null) {
+            logger.warn("authorizationCode 오류: 값이 null입니다")
+            throw IllegalArgumentException("Authorization code is null")
+        }
+
+        val token: GAuthToken = gAuth.generateToken(
+            authorizationCode, clientId, clientSecret, redirectUrl
+        )
+        return token.accessToken
+    }
+
+    fun getUserInfoByCode(accessCode: String): Any {
+        val accessToken: String? = getAccessToken(accessCode)
+        if (accessToken != null) {
+            return gAuth.getUserInfo(accessToken)
+        } else {
+            logger.warn("accessCode 오류: 값이 null입니다")
+            throw IllegalArgumentException("Access code is invalid or null")
+        }
     }
 }
