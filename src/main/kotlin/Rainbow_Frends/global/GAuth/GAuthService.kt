@@ -17,7 +17,7 @@ class GAuthService(private val gAuth: GAuth) : AuthenticateService {
     @Value("\${GAuth-CLIENT-SECRET}")
     private val clientSecret: String? = null
 
-    @Value("\${GAuth-REDIRECT_URI}")
+    @Value("\${GAuth-REDIRECT-URI}")
     private val redirectUrl: String? = null
 
     override fun getAccessToken(authorizationCode: String?): String? {
