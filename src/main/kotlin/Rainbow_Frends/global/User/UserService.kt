@@ -1,6 +1,6 @@
 package Rainbow_Frends.global.GAuth.user.service
 
-import Rainbow_Frends.global.GAuth.GauthService
+import Rainbow_Frends.global.GAuth.GAuthService
 import Rainbow_Frends.global.GAuth.JWT.TokenMemoryRepository
 import Rainbow_Frends.global.GAuth.user.entity.User
 import Rainbow_Frends.global.GAuth.user.repository.UserRepository
@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException
 class UserService(
     private val userRepository: UserRepository,
     private val tokenMemoryRepository: TokenMemoryRepository,
-    private val gauthService: GauthService
+    private val gauthService: GAuthService
 ) {
 
     fun getUserById(id: Long): User {

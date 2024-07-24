@@ -31,9 +31,11 @@ class GauthAuthenticationFilter(
         val accessCode = request.getParameter("accessCode")
         return try {
             val userInfo: GAuthUserInfo = gAuthService.loginWithGauth(accessCode)
-            UsernamePasswordAuthenticationToken(userInfo, userInfo.id)
+            val student_id: Long =
+                (userInfo.grade + userInfo.classNum + if (userInfo.num < 10) 0 + userInfo.num else userInfo.num).toLong()
+            UsernamePasswordAuthenticationToken(userInfo, student_id)
         } catch (e: ResponseStatusException) {
-            throw AuthenticationException("Authentication failed by ${e.statusCode} ${e.message}") {}
+            throw CustomAuthenticationException("Authentication failed by ${e.statusCode} ${e.message}")
         }
     }
 
@@ -41,7 +43,9 @@ class GauthAuthenticationFilter(
         request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain, authResult: Authentication
     ) {
         val userInfo = authResult.principal as GAuthUserInfo
-        val jwt = jwtUtil.createJwt(userInfo.name, userInfo.id, 86400000L)
+        val student_id: Long =
+            (userInfo.grade + userInfo.classNum + if (userInfo.num < 10) 0 + userInfo.num else userInfo.num).toLong()
+        val jwt = jwtUtil.createJwt(userInfo.name, student_id, 86400000L)
         response.addHeader("Authorization", "Bearer $jwt")
     }
 }

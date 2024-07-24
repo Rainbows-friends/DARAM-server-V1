@@ -1,6 +1,7 @@
 package Rainbow_Frends.global.GAuth.JWT
 
-import Rainbow_Frends.global.User.User
+import Rainbow_Frends.global.GAuth.user.entity.User
+import Rainbow_Frends.global.User.UserSignupDto
 import org.springframework.stereotype.Repository
 
 @Repository
