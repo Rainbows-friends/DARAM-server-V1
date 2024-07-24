@@ -1,4 +1,4 @@
-package Rainbow_Frends.global
+package Rainbow_Frends.global.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

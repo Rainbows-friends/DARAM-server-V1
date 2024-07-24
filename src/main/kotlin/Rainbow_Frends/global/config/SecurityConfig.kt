@@ -1,4 +1,4 @@
-package Rainbow_Frends.global
+package Rainbow_Frends.global.config
 
 import Rainbow_Frends.global.GAuth.JWT.CustomAuthenticationSuccessHandler
 import Rainbow_Frends.global.GAuth.JWT.JwtAuthenticationFilter

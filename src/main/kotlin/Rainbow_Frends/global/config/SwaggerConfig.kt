@@ -1,4 +1,4 @@
-package Rainbow_Frends.config
+package Rainbow_Frends.global.config
 
 import org.springdoc.core.models.GroupedOpenApi
 import org.springframework.context.annotation.Bean
