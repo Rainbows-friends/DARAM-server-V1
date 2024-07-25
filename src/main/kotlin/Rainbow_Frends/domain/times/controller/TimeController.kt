@@ -1,5 +1,6 @@
-package Rainbow_Frends.domain.times
+package Rainbow_Frends.domain.times.controller
 
+import Rainbow_Frends.domain.times.TimeResponse
 import Rainbow_Frends.global.Response
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag

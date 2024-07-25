@@ -1,6 +1,5 @@
-package Rainbow_Frends.domain.notice
+package Rainbow_Frends.domain.notice.entity
 
-import Rainbow_Frends.global.GAuth.GAuth
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.sql.Timestamp

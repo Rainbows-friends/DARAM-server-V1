@@ -1,4 +1,4 @@
-package Rainbow_Frends.domain.account
+package Rainbow_Frends.domain.account.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
