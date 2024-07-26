@@ -1,12 +1,31 @@
 package Rainbow_Frends.global.security.jwt
 
+import Rainbow_Frends.domain.account.presentation.dto.response.TokenResponse
+import Rainbow_Frends.global.redis.RedisUtil
+import Rainbow_Frends.global.security.filter.JwtFilter.Companion.AUTHORIZATION_HEADER
+import Rainbow_Frends.global.security.filter.JwtFilter.Companion.BEARER_PREFIX
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.Jwts
+import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.io.Decoders
+import jakarta.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import io.jsonwebtoken.security.Keys
+import jakarta.servlet.http.HttpServletRequest
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.util.StringUtils
+import java.security.Key
+import java.time.LocalDateTime
+import java.util.*
 
 
 @Component
 class JwtProvider(
-    @Value("\${jwt.secret}") private val secretKey: String,
+    @Value("\${JWT-SECRET}") private val secretKey: String,
     private val authDetailsService: AuthDetailsService,
     private val redisUtil: RedisUtil
 ) {
