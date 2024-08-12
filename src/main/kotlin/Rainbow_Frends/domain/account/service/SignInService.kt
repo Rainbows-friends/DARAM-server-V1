@@ -1,4 +1,8 @@
 package Rainbow_Frends.domain.account.service
 
-open class SignInService {
+import Rainbow_Frends.domain.account.presentation.dto.request.SignInRequest
+import Rainbow_Frends.domain.account.presentation.dto.response.TokenResponse
+
+interface SignInService {
+    fun execute(signInRequest: SignInRequest): TokenResponse
 }
