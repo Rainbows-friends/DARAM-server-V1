@@ -1,11 +1,13 @@
-package Rainbow_Frends.domain.account.service
+package Rainbow_Frends.domain.account.service.impl
 
 import Rainbow_Frends.domain.User.entity.Authority
 import Rainbow_Frends.domain.User.entity.StudentNum
 import Rainbow_Frends.domain.User.entity.User
 import Rainbow_Frends.domain.User.repository.UserRepository
+import Rainbow_Frends.domain.account.Repository.RefreshRepository
 import Rainbow_Frends.domain.account.presentation.dto.request.SignInRequest
 import Rainbow_Frends.domain.account.presentation.dto.response.TokenResponse
+import Rainbow_Frends.domain.account.service.SignInService
 import Rainbow_Frends.global.annotation.ServiceWithTransaction
 import Rainbow_Frends.global.security.jwt.JwtProvider
 import gauth.GAuth
@@ -20,7 +22,7 @@ class SignInServiceImpl(
     private val refreshRepository: RefreshRepository,
     private val userRepository: UserRepository,
     private val jwtProvider: JwtProvider
-) : SignInService() {
+) : SignInService {
 
     @Value("\${GAuth-CLIENT-ID}")
     private lateinit var clientId: String
