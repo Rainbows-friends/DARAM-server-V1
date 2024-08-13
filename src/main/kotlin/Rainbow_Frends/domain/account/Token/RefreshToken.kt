@@ -6,11 +6,6 @@ import org.springframework.data.redis.core.index.Indexed
 import java.time.LocalDateTime
 
 @RedisHash(value = "RefreshToken", timeToLive = 60)
-class RefreshToken {
-    @Id
-    private var id: String? = null
-
-    @Indexed
-    private var UUID: String? = null
-    private var expired: LocalDateTime? = null
-}
+data class RefreshToken(
+    @Id val refreshToken: String, @Indexed val UserId: String, val expiredAt: LocalDateTime
+)

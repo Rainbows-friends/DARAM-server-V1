@@ -5,6 +5,7 @@ import Rainbow_Frends.domain.User.entity.StudentNum
 import Rainbow_Frends.domain.User.entity.User
 import Rainbow_Frends.domain.User.repository.UserRepository
 import Rainbow_Frends.domain.account.Repository.RefreshRepository
+import Rainbow_Frends.domain.account.Token.RefreshToken
 import Rainbow_Frends.domain.account.presentation.dto.request.SignInRequest
 import Rainbow_Frends.domain.account.presentation.dto.response.TokenResponse
 import Rainbow_Frends.domain.account.service.SignInService
@@ -44,7 +45,7 @@ class SignInServiceImpl(
 
             val userInfo = gAuth.getUserInfo(gAuthToken.accessToken)
 
-            val user = userRepository.findByEmail(userInfo.email).orElseGet { saveUser(userInfo) }
+            val user = userRepository.findbyEmail(userInfo.email).orElseGet { saveUser(userInfo) }
                 ?: throw UserNotFoundException()
 
             val tokenResponse = jwtProvider.generateTokenDto(user.id)
@@ -95,7 +96,7 @@ class SignInServiceImpl(
     private fun saveRefreshToken(tokenResponse: TokenResponse, user: User) {
         val refreshToken = RefreshToken(
             refreshToken = tokenResponse.refreshToken,
-            memberId = user.id,
+            UserId = user.id.toString(),
             expiredAt = tokenResponse.refreshTokenExpiresIn
         )
 
