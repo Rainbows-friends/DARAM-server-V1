@@ -3,9 +3,9 @@ spring:
     name: DARAM-server-V1
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB-URL}
-    username: ${DB-USERNAME}
-    password: ${DB-PASSWORD}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate: ddl-auto:update
     show-sql: true
@@ -31,7 +31,7 @@ server:
   ssl:
     enabled: true
     key-store: src/main/resources/bootsecurity.p12
-    key-store-password: ${SSL-PASSWORD}
+    key-store-password: ${SSL_PASSWORD}
     key-store-type: PKCS12
     key-alias: bootsecurity
 logging:
@@ -42,11 +42,11 @@ logging:
     path: /src/main/resources/log
 gauth:
   security:
-    client-id: ${GAuth-CLIENT-ID}
-    client-secret: ${GAuth-CLIENT-SECRET}
-    redirect-uri: ${GAuth-REDIRECT-URI}
-GAuth-CLIENT-ID: ${GAuth-CLIENT-ID}
-GAuth-CLIENT-SECRET: ${GAuth-CLIENT-SECRET}
-GAuth-REDIRECT-URI: ${GAuth-REDIRECT-URI}
+    client-id: ${GAuth_CLIENT_ID}
+    client-secret: ${GAuth_CLIENT_SECRET}
+    redirect-uri: ${GAuth_REDIRECT_URI}
+GAuth-CLIENT-ID: ${GAuth_CLIENT_ID}
+GAuth-CLIENT-SECRET: ${GAuth_CLIENT_SECRET}
+GAuth-REDIRECT-URI: ${GAuth_REDIRECT_URI}
 jwt:
-  secret: ${JWT-SECRET}
+  secret: ${JWT_SECRET}
