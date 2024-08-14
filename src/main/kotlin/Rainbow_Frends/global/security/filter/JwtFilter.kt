@@ -22,7 +22,7 @@ class JwtFilter(private val jwtProvider: JwtProvider) : OncePerRequestFilter() {
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         val jwt = jwtProvider.resolveToken(request)
 
-        if (StringUtils.hasText(jwt) && jwtProvider.validateToken(jwt)) {
+        if (StringUtils.hasText(jwt) && jwt?.let { jwtProvider.validateToken(it) } == true) {
             val authentication: Authentication = jwtProvider.getAuthentication(jwt)
             SecurityContextHolder.getContext().setAuthentication(authentication)
         }

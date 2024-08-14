@@ -1,6 +1,9 @@
 package Rainbow_Frends.global.security.jwt
 
+import Rainbow_Frends.domain.account.exception.ExpiredTokenException
 import Rainbow_Frends.domain.account.presentation.dto.response.TokenResponse
+import Rainbow_Frends.global.exception.DARAMException
+import Rainbow_Frends.global.exception.ErrorCode
 import Rainbow_Frends.global.redis.RedisUtil
 import Rainbow_Frends.global.security.filter.JwtFilter.Companion.AUTHORIZATION_HEADER
 import Rainbow_Frends.global.security.filter.JwtFilter.Companion.BEARER_PREFIX
@@ -25,17 +28,18 @@ import java.util.*
 
 @Component
 class JwtProvider(
-    @Value("\${JWT-SECRET}") private val secretKey: String,
     private val authDetailsService: AuthDetailsService,
     private val redisUtil: RedisUtil
 ) {
+    @Value("\${jwt.secret}")
+    private lateinit var secretKey: String
     private lateinit var key: Key
 
     companion object {
         private const val AUTHORITIES_KEY = "auth"
         private const val BEARER_TYPE = "Bearer "
-        private const val ACCESS_TOKEN_TIME = 1000 * 60 * 30L
-        private const val REFRESH_TOKEN_TIME = 1000 * 60 * 60 * 24 * 7L
+        private const val ACCESS_TOKEN_TIME = 60L * 30 * 4
+        private const val REFRESH_TOKEN_TIME = 60L * 60 * 24 * 7
     }
 
     @PostConstruct
@@ -45,12 +49,17 @@ class JwtProvider(
     }
 
     fun generateTokenDto(id: UUID): TokenResponse {
-        return TokenResponse.builder()
-            .accessToken(generateAccessToken(id))
-            .refreshToken(generateRefreshToken(id))
-            .accessTokenExpiresIn(LocalDateTime.now().plusSeconds(ACCESS_TOKEN_TIME))
-            .refreshTokenExpiresIn(LocalDateTime.now().plusSeconds(REFRESH_TOKEN_TIME))
-            .build()
+        val accessToken = generateAccessToken(id)
+        val refreshToken = generateRefreshToken(id)
+        val accessTokenExpiresIn = LocalDateTime.now().plusSeconds(ACCESS_TOKEN_TIME)
+        val refreshTokenExpiresIn = LocalDateTime.now().plusSeconds(REFRESH_TOKEN_TIME)
+
+        return TokenResponse(
+            accessToken = accessToken,
+            refreshToken = refreshToken,
+            accessTokenExpiresIn = accessTokenExpiresIn,
+            refreshTokenExpiresIn = refreshTokenExpiresIn
+        )
     }
 
     fun getExpiration(accessToken: String): Long {
@@ -78,7 +87,7 @@ class JwtProvider(
         val claims = parseClaims(accessToken)
 
         if (claims[AUTHORITIES_KEY] == null) {
-            throw MindWayException(ErrorCode.INVALID_TOKEN)
+            throw DARAMException(ErrorCode.INVALID_TOKEN)
         }
 
         val principal: UserDetails = authDetailsService.loadUserByUsername(claims.subject)
@@ -108,6 +117,7 @@ class JwtProvider(
 
     fun generateAccessToken(id: UUID): String {
         val now = Date().time
+
         val accessTokenExpiresIn = Date(now + ACCESS_TOKEN_TIME)
 
         return Jwts.builder()
@@ -121,6 +131,7 @@ class JwtProvider(
 
     fun generateRefreshToken(id: UUID): String {
         val now = Date().time
+
         val refreshTokenExpiresIn = Date(now + REFRESH_TOKEN_TIME)
 
         return Jwts.builder()

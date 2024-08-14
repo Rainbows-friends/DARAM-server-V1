@@ -1,5 +1,6 @@
 package Rainbow_Frends.domain.account.exception
 
-class UserNotFoundException {
+import Rainbow_Frends.global.exception.DARAMException
+import Rainbow_Frends.global.exception.ErrorCode
 
-}
+class UserNotFoundException : DARAMException(ErrorCode.USER_NOT_FOUND)

@@ -1,5 +1,3 @@
 package Rainbow_Frends.global.exception
 
-class DARAMException():RuntimeException() {
-    private final val errorCode:ErrorCode
-}
+open class DARAMException(val errorCode: ErrorCode) : RuntimeException()
