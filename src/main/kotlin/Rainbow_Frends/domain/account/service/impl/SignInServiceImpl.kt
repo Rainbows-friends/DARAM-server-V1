@@ -43,7 +43,7 @@ class SignInServiceImpl(
 
             val userInfo = gAuth.getUserInfo(gAuthToken.accessToken)
 
-            val user = userRepository.findbyEmail(userInfo.email)?.let { it } ?: saveUser(userInfo)
+            val user = userRepository.findByEmail(userInfo.email)?.let { it } ?: saveUser(userInfo)
             ?: throw UserNotFoundException()
 
             val tokenResponse = user.id?.let { jwtProvider.generateTokenDto(it) } ?: throw UserNotFoundException()
