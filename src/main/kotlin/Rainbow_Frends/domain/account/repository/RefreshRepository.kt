@@ -1,4 +1,4 @@
-package Rainbow_Frends.domain.account.Repository
+package Rainbow_Frends.domain.account.repository
 
 import Rainbow_Frends.domain.account.Token.RefreshToken
 import org.springframework.data.repository.CrudRepository
