@@ -16,8 +16,8 @@ spring:
     generate-ddl: on
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${Redis_URL}
+      port: ${Redis_PORT}
 
   mvc:
     pathmatch:
