@@ -6,7 +6,7 @@ import Rainbow_Frends.domain.account.presentation.dto.response.TokenResponse
 import Rainbow_Frends.global.auth.AuthDetailsService
 import Rainbow_Frends.global.exception.DARAMException
 import Rainbow_Frends.global.exception.ErrorCode
-import Rainbow_Frends.global.redis.RedisUtil
+import Rainbow_Frends.global.redis.RedisConfig
 import Rainbow_Frends.global.security.filter.JwtFilter.Companion.AUTHORIZATION_HEADER
 import Rainbow_Frends.global.security.filter.JwtFilter.Companion.BEARER_PREFIX
 import io.jsonwebtoken.Claims
@@ -31,7 +31,7 @@ import java.util.*
 @Component
 class JwtProvider(
     private val authDetailsService: AuthDetailsService,
-    private val redisUtil: RedisUtil
+    private val redisUtil: RedisConfig.RedisUtil
 ) {
     @Value("\${jwt.secret}")
     private lateinit var secretKey: String
