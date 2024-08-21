@@ -1,0 +1,57 @@
+name: Deploy to cloudtype
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Connect deploy key
+        uses: cloudtype-github-actions/connect@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          ghtoken: ${{ secrets.GHP_TOKEN }}
+      - name: Deploy
+        uses: cloudtype-github-actions/deploy@v1
+        with:
+          token: ${{ secrets.CLOUDTYPE_TOKEN }}
+          project: snowykte0426/daram
+          stage: main
+          yaml: >
+            name: daram-server-v1
+
+            app: java@21
+
+            options:
+              ports: "5000"
+              env:
+                - name: DB_PASSWORD
+                  value: "123456"
+                - name: DB_URL
+                  value: jdbc:mariadb://svc.sel4.cloudtype.app:32489/daram
+                - name: DB_USERNAME
+                  value: root
+                - name: GAuth_CLIENT_ID
+                  value: 0906594b6e1a49138b79e5934eaddea575c580063a6844be92a6dcc76050a790
+                - name: GAuth_CLIENT_SECRET
+                  value: 39bd0f9270d14cda89a55c54cbffbcb632c4f43b0e184fc1aa7ab5e5c801151d
+                - name: GAuth_REDIRECT_URI
+                  value: https://localhost:5000/page
+                - name: JWT_SECRET
+                  value: c2Fka2psc2FkZmtsanNha2psd2Vxa2psd3FramxramxrbGpKS2g4OXVpWVU4MDk4WTA5dTk5VTkwdTkwVVUwOTkwdTc4NTZUNHI1NlI2N0ZJQ25EakZpck5lS0RpRmpSblliZ0tyRUxkT0lmSmdtUmtmLEtnakdpVGt0SnJrZm9ka0VtVHVpR21UUm5SSWZJZ2oyZ2tqMjFSVDNKRzNKMmcyM2oyRzNKRkQxUzFKMTFKMzE3NjhmMTRKODc5M0lGMDg5MTRpM2o5ODBnRkQ0Uzg5N0tKTDUwODdER0ZTNjg5bGtqbjJkOXY4Nm9pMzk2OGozZ2ZlZG9pYXNq
+                - name: Redis_PORT
+                  value: "32318"
+                - name: Redis_URL
+                  value: svc.sel4.cloudtype.app
+                - name: SSL_PASSWORD
+                  value: "20170723"
+              buildenv: []
+              build: ./gradlew build
+            context:
+              git:
+                url: git@github.com:${{ github.repository }}.git
+                ref: ${{ github.ref }}
+              preset: java-springboot
