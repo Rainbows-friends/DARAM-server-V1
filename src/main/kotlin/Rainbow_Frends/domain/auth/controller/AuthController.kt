@@ -7,7 +7,6 @@ import Rainbow_Frends.domain.account.service.ReissueTokenService
 import Rainbow_Frends.domain.account.service.SignInService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -18,15 +17,6 @@ class AuthController(
     private val logoutService: LogoutService,
     private val reissueTokenService: ReissueTokenService
 ) {
-
-    @Value("\${GAuth-CLIENT-ID}")
-    private lateinit var clientId: String
-
-    @Value("\${GAuth-CLIENT-SECRET}")
-    private lateinit var clientSecret: String
-
-    @Value("\${GAuth-REDIRECT-URI}")
-    private lateinit var redirectUri: String
 
     @PostMapping("/code")
     fun signIn(@RequestBody @Valid signInRequest: SignInRequest): ResponseEntity<TokenResponse> {
