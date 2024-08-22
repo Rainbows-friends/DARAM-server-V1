@@ -19,12 +19,20 @@ class JwtFilter(private val jwtProvider: JwtProvider) : OncePerRequestFilter() {
     }
 
     @Throws(IOException::class, ServletException::class)
-    override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+    override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain
+    ) {
         val jwt = jwtProvider.resolveToken(request)
 
         if (StringUtils.hasText(jwt) && jwt?.let { jwtProvider.validateToken(it) } == true) {
             val authentication: Authentication = jwtProvider.getAuthentication(jwt)
-            SecurityContextHolder.getContext().setAuthentication(authentication)
+            SecurityContextHolder.getContext().authentication = authentication
+        } else if (!StringUtils.hasText(jwt)) {
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            response.writer.write("JWT 토큰이 제공되지 않았습니다.")
+            return
         }
 
         filterChain.doFilter(request, response)
