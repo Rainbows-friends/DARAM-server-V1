@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 
 @Tag(name = "시간", description = "시간 조회API")
 @RestController
-@RequestMapping("/times")
+@RequestMapping("/api/times")
 class TimeController {
     @Operation(summary = "입실 남은 시간 조회", description = "입실 마감까지 남은 시간 조회 API")
     @ResponseStatus(HttpStatus.OK)
