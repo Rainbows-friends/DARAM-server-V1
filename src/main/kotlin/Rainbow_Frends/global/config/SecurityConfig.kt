@@ -25,9 +25,9 @@ class SecurityConfig(
                 request.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll().requestMatchers(
                         "/gauth/authorization",
                         "/login/gauth/code",
-                        "login/gauth/logout",
-                        "login/gauth/reissue"
-                    ).permitAll().requestMatchers("/auth/me", "times/remaintime").authenticated()
+                        "/login/gauth/logout",
+                        "/login/gauth/reissue"
+                    ).permitAll().requestMatchers("/auth/me", "/times/remaintime").authenticated()
                     .requestMatchers("/role/student").hasAuthority("GAUTH_ROLE_STUDENT")
                     .requestMatchers("/role/teacher").hasAuthority("GAUTH_ROLE_TEACHER").anyRequest().denyAll()
             }.addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
