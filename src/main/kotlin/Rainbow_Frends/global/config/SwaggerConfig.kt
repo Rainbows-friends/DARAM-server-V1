@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class SwaggerConfig {
+
     @Bean
     fun timeApi(): GroupedOpenApi {
         return GroupedOpenApi.builder().group("times").pathsToMatch("/times/**")
@@ -14,7 +15,7 @@ class SwaggerConfig {
 
     @Bean
     fun gauthApi(): GroupedOpenApi {
-        return GroupedOpenApi.builder().group("GAuth").pathsToMatch("/user/**")
-            .packagesToScan("Rainbow_Frends.domain.GAuth").build()
+        return GroupedOpenApi.builder().group("GAuth").pathsToMatch("/login/gauth/**")
+            .packagesToScan("Rainbow_Frends.domain.auth.controller").build()
     }
 }

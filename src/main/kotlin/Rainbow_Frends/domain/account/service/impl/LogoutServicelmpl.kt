@@ -1,9 +1,9 @@
 package Rainbow_Frends.domain.account.service.impl
 
 import Rainbow_Frends.domain.User.entity.User
-import Rainbow_Frends.domain.account.Repository.RefreshRepository
 import Rainbow_Frends.domain.account.Token.RefreshToken
 import Rainbow_Frends.domain.account.exception.ExpiredRefreshTokenException
+import Rainbow_Frends.domain.account.repository.RefreshRepository
 import Rainbow_Frends.domain.account.service.LogoutService
 import Rainbow_Frends.domain.account.util.UserUtil
 import Rainbow_Frends.global.annotation.ServiceWithTransaction
@@ -21,7 +21,7 @@ class LogoutServiceImpl(
     override fun execute(accessToken: String) {
         val user: User = userUtil.getCurrentUser()
         val validRefreshToken: RefreshToken = user.id?.let { userId ->
-            refreshRepository.findByMemberId(userId)
+            refreshRepository.findByUserId(userId)
         } ?: throw ExpiredRefreshTokenException()
 
         refreshRepository.deleteById(validRefreshToken.refreshToken)

@@ -14,14 +14,14 @@ import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.io.Decoders
-import jakarta.annotation.PostConstruct
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
 import io.jsonwebtoken.security.Keys
+import jakarta.annotation.PostConstruct
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.stereotype.Component
 import org.springframework.util.StringUtils
 import java.security.Key
 import java.time.LocalDateTime
@@ -31,7 +31,7 @@ import java.util.*
 @Component
 class JwtProvider(
     private val authDetailsService: AuthDetailsService,
-    private val redisUtil: RedisConfig.RedisUtil
+    private val redisUtil: RedisConfig.RedisUtil,
 ) {
     @Value("\${jwt.secret}")
     private lateinit var secretKey: String
@@ -40,8 +40,8 @@ class JwtProvider(
     companion object {
         private const val AUTHORITIES_KEY = "auth"
         private const val BEARER_TYPE = "Bearer "
-        private const val ACCESS_TOKEN_TIME = 60L * 30 * 4
-        private const val REFRESH_TOKEN_TIME = 60L * 60 * 24 * 7
+        private const val ACCESS_TOKEN_TIME = 60L * 30 * 4 * 1000
+        private const val REFRESH_TOKEN_TIME = 60L * 60 * 24 * 7 * 1000
     }
 
     @PostConstruct
@@ -65,14 +65,11 @@ class JwtProvider(
     }
 
     fun getExpiration(accessToken: String): Long {
-        val claims = Jwts.parserBuilder()
-            .setSigningKey(key)
-            .build()
-            .parseClaimsJws(accessToken)
-            .body
+        val claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).body
 
         return claims.expiration.time
     }
+
 
     fun validateToken(token: String): Boolean {
         return try {
@@ -122,13 +119,8 @@ class JwtProvider(
 
         val accessTokenExpiresIn = Date(now + ACCESS_TOKEN_TIME)
 
-        return Jwts.builder()
-            .setSubject(id.toString())
-            .claim(AUTHORITIES_KEY, "JWT")
-            .setIssuedAt(Date())
-            .setExpiration(accessTokenExpiresIn)
-            .signWith(key, SignatureAlgorithm.HS256)
-            .compact()
+        return Jwts.builder().setSubject(id.toString()).claim(AUTHORITIES_KEY, "JWT").setIssuedAt(Date())
+            .setExpiration(accessTokenExpiresIn).signWith(key, SignatureAlgorithm.HS256).compact()
     }
 
     fun generateRefreshToken(id: UUID): String {
@@ -136,10 +128,7 @@ class JwtProvider(
 
         val refreshTokenExpiresIn = Date(now + REFRESH_TOKEN_TIME)
 
-        return Jwts.builder()
-            .setSubject(id.toString())
-            .setExpiration(refreshTokenExpiresIn)
-            .signWith(key, SignatureAlgorithm.HS256)
-            .compact()
+        return Jwts.builder().setSubject(id.toString()).setExpiration(refreshTokenExpiresIn)
+            .signWith(key, SignatureAlgorithm.HS256).compact()
     }
 }

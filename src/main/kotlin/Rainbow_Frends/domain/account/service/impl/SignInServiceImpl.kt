@@ -4,7 +4,7 @@ import Rainbow_Frends.domain.User.entity.Authority
 import Rainbow_Frends.domain.User.entity.StudentNum
 import Rainbow_Frends.domain.User.entity.User
 import Rainbow_Frends.domain.User.repository.UserRepository
-import Rainbow_Frends.domain.account.Repository.RefreshRepository
+import Rainbow_Frends.domain.account.repository.RefreshRepository
 import Rainbow_Frends.domain.account.Token.RefreshToken
 import Rainbow_Frends.domain.account.exception.UserNotFoundException
 import Rainbow_Frends.domain.account.presentation.dto.request.SignInRequest
@@ -92,12 +92,12 @@ class SignInServiceImpl(
     }
 
     private fun saveRefreshToken(tokenResponse: TokenResponse, user: User) {
-        val refreshToken = RefreshToken(
-            refreshToken = tokenResponse.refreshToken,
-            UserId = user.id.toString(),
-            expiredAt = tokenResponse.refreshTokenExpiresIn
-        )
+        val refreshToken = user.id?.let {
+            RefreshToken(
+                refreshToken = tokenResponse.refreshToken, UserId = it, expiredAt = tokenResponse.refreshTokenExpiresIn
+            )
+        }
 
-        refreshRepository.save(refreshToken)
+        refreshToken?.let { refreshRepository.save(it) }
     }
 }
