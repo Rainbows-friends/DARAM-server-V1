@@ -40,8 +40,8 @@ class JwtProvider(
     companion object {
         private const val AUTHORITIES_KEY = "auth"
         private const val BEARER_TYPE = "Bearer "
-        private const val ACCESS_TOKEN_TIME = 60L * 30 * 4
-        private const val REFRESH_TOKEN_TIME = 60L * 60 * 24 * 7
+        private const val ACCESS_TOKEN_TIME = 60L * 30 * 4 * 1000
+        private const val REFRESH_TOKEN_TIME = 60L * 60 * 24 * 7 * 1000
     }
 
     @PostConstruct
