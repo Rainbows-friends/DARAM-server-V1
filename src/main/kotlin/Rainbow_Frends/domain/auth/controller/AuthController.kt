@@ -18,7 +18,7 @@ import org.springframework.web.ErrorResponse
 import org.springframework.web.bind.annotation.*
 
 @Tag(name = "AuthController", description = "인증 관련 API")
-@RequestMapping("/login/gauth")
+@RequestMapping("/api/login/gauth")
 @RestController
 class AuthController(
     private val signInService: SignInService,
