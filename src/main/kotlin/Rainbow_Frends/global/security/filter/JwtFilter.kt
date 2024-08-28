@@ -24,11 +24,13 @@ class JwtFilter(
     private val logger = LoggerFactory.getLogger(JwtFilter::class.java)
 
     private val excludedPaths = setOf(
-        "/gauth/authorization", "/login/gauth/code", "/login/gauth/logout", "/login/gauth/reissue", "/page"
+        "/gauth/authorization", "/api/login/gauth/code", "/api/login/gauth/logout", "/api/login/gauth/reissue", "/page"
     )
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
-        return excludedPaths.contains(request.requestURI)
+        val shouldNotFilter = excludedPaths.any { request.requestURI.startsWith(it) }
+        logger.debug("Request URI: ${request.requestURI}, Should not filter: $shouldNotFilter")
+        return shouldNotFilter
     }
 
     @Throws(IOException::class, ServletException::class)
