@@ -22,12 +22,12 @@ class SecurityConfig(
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        http.csrf { it.disable() }.cors { it.configurationSource(corsConfigurationSource()) } // CORS 활성화 및 설정 추가
+        http.csrf { it.disable() }.cors { it.configurationSource(corsConfigurationSource()) }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { request ->
                 request.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll().requestMatchers(
-                    "/gauth/authorization", "/login/gauth/code", "/login/gauth/logout", "/login/gauth/reissue"
-                ).permitAll().requestMatchers("/auth/me", "/times/remaintime").authenticated()
+                    "/gauth/authorization", "/api/login/gauth/code", "/api/login/gauth/logout", "/api/login/gauth/reissue"
+                ).permitAll().requestMatchers("/auth/me", "/api/times/remaintime").authenticated()
                     .requestMatchers("/role/student").hasAuthority("GAUTH_ROLE_STUDENT")
                     .requestMatchers("/role/teacher").hasAuthority("GAUTH_ROLE_TEACHER").anyRequest().denyAll()
             }.addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
