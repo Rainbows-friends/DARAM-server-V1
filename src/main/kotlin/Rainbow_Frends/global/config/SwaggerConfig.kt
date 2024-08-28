@@ -6,16 +6,14 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 class SwaggerConfig {
-
     @Bean
     fun timeApi(): GroupedOpenApi {
-        return GroupedOpenApi.builder().group("times").pathsToMatch("/times/**")
-            .packagesToScan("Rainbow_Frends.domain.times").build()
+        return GroupedOpenApi.builder().group("times").pathsToMatch("/api/times/**")
+            .packagesToScan("Rainbow_Frends.domain.times.controller").build()
     }
-
     @Bean
     fun gauthApi(): GroupedOpenApi {
-        return GroupedOpenApi.builder().group("GAuth").pathsToMatch("/login/gauth/**")
+        return GroupedOpenApi.builder().group("GAuth").pathsToMatch("/api/login/gauth/**")
             .packagesToScan("Rainbow_Frends.domain.auth.controller").build()
     }
 }
