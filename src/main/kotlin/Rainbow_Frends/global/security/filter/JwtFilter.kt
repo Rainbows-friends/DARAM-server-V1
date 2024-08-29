@@ -15,12 +15,23 @@ import java.io.IOException
 class JwtFilter(
     private val jwtProvider: JwtProvider
 ) : OncePerRequestFilter() {
+
     companion object {
         const val AUTHORIZATION_HEADER = "Authorization"
         const val BEARER_PREFIX = "Bearer "
     }
 
     private val logger = LoggerFactory.getLogger(JwtFilter::class.java)
+
+    private val excludedPaths = setOf(
+        "/gauth/authorization", "/api/login/gauth/code", "/api/login/gauth/logout", "/api/login/gauth/reissue", "/page"
+    )
+
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
+        val shouldNotFilter = excludedPaths.any { request.requestURI.startsWith(it) }
+        logger.debug("Request URI: ${request.requestURI}, Should not filter: $shouldNotFilter")
+        return shouldNotFilter
+    }
 
     @Throws(IOException::class, ServletException::class)
     override fun doFilterInternal(

@@ -4,11 +4,14 @@ import Rainbow_Frends.domain.User.entity.Authority
 import Rainbow_Frends.domain.User.entity.StudentNum
 import Rainbow_Frends.domain.User.entity.User
 import Rainbow_Frends.domain.User.repository.UserRepository
-import Rainbow_Frends.domain.account.repository.RefreshRepository
+import Rainbow_Frends.domain.account.repository.redis.RefreshRepository
 import Rainbow_Frends.domain.account.Token.RefreshToken
+import Rainbow_Frends.domain.account.entity.Account
+import Rainbow_Frends.domain.account.entity.Role
 import Rainbow_Frends.domain.account.exception.UserNotFoundException
 import Rainbow_Frends.domain.account.presentation.dto.request.SignInRequest
 import Rainbow_Frends.domain.account.presentation.dto.response.TokenResponse
+import Rainbow_Frends.domain.account.repository.jpa.AccountRepository
 import Rainbow_Frends.domain.account.service.SignInService
 import Rainbow_Frends.global.annotation.ServiceWithTransaction
 import Rainbow_Frends.global.security.jwt.JwtProvider
@@ -23,6 +26,7 @@ class SignInServiceImpl(
     private val gAuth: GAuth,
     private val refreshRepository: RefreshRepository,
     private val userRepository: UserRepository,
+    private val accountRepository: AccountRepository, // AccountRepository 주입
     private val jwtProvider: JwtProvider
 ) : SignInService {
 
@@ -49,6 +53,7 @@ class SignInServiceImpl(
             val tokenResponse = user.id?.let { jwtProvider.generateTokenDto(it) } ?: throw UserNotFoundException()
 
             saveRefreshToken(tokenResponse, user)
+            saveAccount(user)  // Account 저장 로직 추가
 
             return tokenResponse
 
@@ -99,5 +104,18 @@ class SignInServiceImpl(
         }
 
         refreshToken?.let { refreshRepository.save(it) }
+    }
+
+    private fun saveAccount(user: User) {
+        val studentNum = user.studentNum ?: throw IllegalArgumentException("StudentNum cannot be null")
+
+        val studentId = (studentNum.grade * 1000) + (studentNum.classNum * 100) + studentNum.number
+
+        val account = Account().apply {
+            this.student_id = studentId
+            this.role = Role.ROLE_AVERAGE_STUDENT
+        }
+
+        accountRepository.save(account)
     }
 }

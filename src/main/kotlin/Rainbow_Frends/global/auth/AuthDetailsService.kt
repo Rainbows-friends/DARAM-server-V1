@@ -18,7 +18,7 @@ class AuthDetailsService(
     private val logger: Logger = (this as Any).logger()
 
     override fun loadUserByUsername(id: String): UserDetails {
-        logger.info("Loading user by ID: $id")
+        logger.info("Loading User by ID: $id")
         return userRepository.findById(UUID.fromString(id)).map { AuthDetails(it) as UserDetails }.orElseThrow {
             logger.error("User not found for ID: $id")
             throw DARAMException(ErrorCode.USER_NOT_FOUND)
