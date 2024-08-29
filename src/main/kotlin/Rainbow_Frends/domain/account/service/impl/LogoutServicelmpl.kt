@@ -3,7 +3,7 @@ package Rainbow_Frends.domain.account.service.impl
 import Rainbow_Frends.domain.User.entity.User
 import Rainbow_Frends.domain.account.Token.RefreshToken
 import Rainbow_Frends.domain.account.exception.ExpiredRefreshTokenException
-import Rainbow_Frends.domain.account.repository.RefreshRepository
+import Rainbow_Frends.domain.account.repository.redis.RefreshRepository
 import Rainbow_Frends.domain.account.service.LogoutService
 import Rainbow_Frends.domain.account.util.UserUtil
 import Rainbow_Frends.global.annotation.ServiceWithTransaction
