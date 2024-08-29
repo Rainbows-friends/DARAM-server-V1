@@ -6,7 +6,7 @@ import Rainbow_Frends.domain.account.exception.ExpiredRefreshTokenException
 import Rainbow_Frends.domain.account.exception.UserNotFoundException
 import Rainbow_Frends.domain.account.presentation.dto.response.TokenResponse
 import Rainbow_Frends.domain.account.service.ReissueTokenService
-import Rainbow_Frends.domain.account.repository.RefreshRepository
+import Rainbow_Frends.domain.account.repository.redis.RefreshRepository
 import Rainbow_Frends.global.annotation.ServiceWithTransaction
 import Rainbow_Frends.global.security.jwt.JwtProvider
 import java.time.LocalDateTime
