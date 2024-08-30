@@ -1,6 +1,5 @@
 package Rainbow_Frends.domain.notice.controller
 
-import Rainbow_Frends.domain.User.entity.User
 import Rainbow_Frends.domain.account.repository.jpa.AccountRepository
 import Rainbow_Frends.domain.notice.dto.request.NoticeRequest
 import Rainbow_Frends.domain.notice.entity.Notice
@@ -36,10 +35,7 @@ class NoticeController(
         val accessToken = jwtProvider.resolveToken(request)
         val authentication = jwtProvider.getAuthentication(accessToken!!)
         val userDetails = authentication.principal as UserDetails
-
-        val user = noticeService.getUserByUsername(userDetails.username) // User 객체를 가져오는 로직
-
-        // 비즈니스 로직은 서비스 레이어에서 처리
+        val user = noticeService.getUserByUsername(userDetails.username)
         noticeService.createNotice(noticeRequest, user)
     }
 }
