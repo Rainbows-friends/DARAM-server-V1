@@ -31,9 +31,7 @@ class NoticeServiceImpl(
             ?: throw RuntimeException("student_id: $studentId 에 해당하는 Account를 찾을 수 없습니다.")
 
         val notice = Notice(
-            title = noticeRequest.title,
-            content = noticeRequest.content,
-            writer = account
+            title = noticeRequest.title, content = noticeRequest.content, writer = account
         )
         noticeRepository.save(notice)
     }
