@@ -11,4 +11,7 @@ class Account {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     var role: Role? = null
+
+    @Column(name="profilePicture")
+    var profilePicture: String? = null
 }
