@@ -30,8 +30,13 @@ class SecurityConfig(
                     "/api/login/gauth/code",
                     "/api/login/gauth/logout",
                     "/api/login/gauth/reissue"
-                ).permitAll().requestMatchers("/auth/me", "/api/times/remaintime", "/api/notice", "/api/notice/all")
-                    .authenticated().requestMatchers("/role/student").hasAuthority("GAUTH_ROLE_STUDENT")
+                ).permitAll().requestMatchers(
+                    "/auth/me",
+                    "/api/times/remaintime",
+                    "/api/notice",
+                    "/api/notice/all,",
+                    "/api/account/**"
+                ).authenticated().requestMatchers("/role/student").hasAuthority("GAUTH_ROLE_STUDENT")
                     .requestMatchers("/role/teacher").hasAuthority("GAUTH_ROLE_TEACHER").anyRequest().denyAll()
             }.addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
         gAuthLoginConfigurer.configure(http)
