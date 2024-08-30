@@ -26,7 +26,7 @@ class SignInServiceImpl(
     private val gAuth: GAuth,
     private val refreshRepository: RefreshRepository,
     private val userRepository: UserRepository,
-    private val accountRepository: AccountRepository, // AccountRepository 주입
+    private val accountRepository: AccountRepository,
     private val jwtProvider: JwtProvider
 ) : SignInService {
 
@@ -53,7 +53,7 @@ class SignInServiceImpl(
             val tokenResponse = user.id?.let { jwtProvider.generateTokenDto(it) } ?: throw UserNotFoundException()
 
             saveRefreshToken(tokenResponse, user)
-            saveAccount(user)  // Account 저장 로직 추가
+            saveAccount(user)
 
             return tokenResponse
 
@@ -112,7 +112,7 @@ class SignInServiceImpl(
         val studentId = (studentNum.grade * 1000) + (studentNum.classNum * 100) + studentNum.number
 
         val account = Account().apply {
-            this.student_id = studentId
+            this.studentId = studentId
             this.role = Role.ROLE_AVERAGE_STUDENT
         }
 
