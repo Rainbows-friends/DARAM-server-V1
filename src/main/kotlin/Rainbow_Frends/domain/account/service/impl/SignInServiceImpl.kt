@@ -104,7 +104,8 @@ class SignInServiceImpl(
         val account = Account().apply {
             this.studentId = studentId
             this.role = Role.ROLE_AVERAGE_STUDENT
-            this.profilePicture = null
+            this.profilePictureURL = null
+            this.profilePictureName = null
         }
         accountRepository.save(account)
     }
