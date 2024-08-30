@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 
@@ -31,11 +32,11 @@ class NoticeController(
     @Operation(summary = "공지 등록 API", description = "공지를 등록하는 API")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    fun postNotice(@RequestBody noticeRequest: NoticeRequest, request: HttpServletRequest) {
+    fun postNotice(@RequestBody noticeRequest: NoticeRequest, request: HttpServletRequest): ResponseEntity<Notice> {
         val accessToken = jwtProvider.resolveToken(request)
         val authentication = jwtProvider.getAuthentication(accessToken!!)
         val userDetails = authentication.principal as UserDetails
         val user = noticeService.getUserByUsername(userDetails.username)
-        noticeService.createNotice(noticeRequest, user)
+        return noticeService.createNotice(noticeRequest, user)
     }
 }
