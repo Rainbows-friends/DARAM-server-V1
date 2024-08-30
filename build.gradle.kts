@@ -22,6 +22,7 @@ repositories {
 }
 
 dependencies {
+    /* Spring Boot Starters */
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -29,26 +30,36 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-tomcat")
-
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
-    implementation("com.github.YangSiJun528:GAuth-spring-boot-starter:3.0.0")
-    implementation("com.github.GSM-MSG:GAuth-SDK-Java:v3.0.0")
-    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
-
-    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
-    implementation("io.jsonwebtoken:jjwt-impl:0.11.5")
-    implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
-
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
+    /* Kotlin Support */
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    /* OpenAPI/Swagger */
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
+
+    /* GAuth */
+    implementation("com.github.YangSiJun528:GAuth-spring-boot-starter:3.0.0")
+    implementation("com.github.GSM-MSG:GAuth-SDK-Java:v3.0.0")
+
+    /* Thymeleaf Extras */
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+
+    /* JWT */
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
+    /* AWS */
+    implementation("com.amazonaws:aws-java-sdk-s3:1.12.691")
+
+    /* Database */
+    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
+
+    /* Testing */
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
