@@ -1,22 +1,23 @@
 package Rainbow_Frends.domain.notice.entity
 
+import Rainbow_Frends.domain.account.entity.Account
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.sql.Timestamp
 
 @Entity
-class Notice {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var notice_id: Long? = null
-    @Column(nullable = false,length = 50)
-    private var title: String? = null
-    @Column(nullable = false)
-    @Lob
-    private var content: String? = null
-    @Column(nullable = false)
-    private var writer: String? = null
-    @Column(nullable = false)
-    @CreationTimestamp
-    private var createDate: Timestamp? = null
-}
+class Notice(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var notice_id: Long? = null,
+
+    @Column(nullable = false, length = 50) var title: String,
+
+    @Column(nullable = false) @Lob var content: String,
+
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(
+        name = "writer",
+        referencedColumnName = "studentId",
+        nullable = false
+    ) var writer: Account,
+
+    @Column(nullable = false) @CreationTimestamp var createDate: Timestamp? = null
+)
