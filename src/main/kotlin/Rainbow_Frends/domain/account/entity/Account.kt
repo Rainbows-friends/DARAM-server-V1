@@ -12,6 +12,9 @@ class Account {
     @Enumerated(EnumType.STRING)
     var role: Role? = null
 
-    @Column(name="profilePicture")
-    var profilePicture: String? = null
+    @Column(name = "profilePictureURL")
+    var profilePictureURL: String? = null
+
+    @Column(name = "profilePictureName")
+    var profilePictureName: String? = null
 }
