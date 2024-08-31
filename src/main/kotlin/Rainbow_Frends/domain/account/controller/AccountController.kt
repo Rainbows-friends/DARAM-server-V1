@@ -1,8 +1,11 @@
 package Rainbow_Frends.domain.account.controller
 
 import Rainbow_Frends.domain.User.repository.UserRepository
+import Rainbow_Frends.domain.account.presentation.dto.response.AccountDetailResponse
 import Rainbow_Frends.domain.account.repository.jpa.AccountRepository
+import Rainbow_Frends.domain.account.service.AccountInfoService
 import Rainbow_Frends.domain.account.service.ProfilePictureService
+import Rainbow_Frends.domain.account.service.impl.AccountInfoServiceImpl
 import Rainbow_Frends.global.security.jwt.JwtProvider
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -20,6 +23,7 @@ class AccountController(
     private val userRepository: UserRepository,
     private val accountRepository: AccountRepository,
     private val profilePictureService: ProfilePictureService,
+    private val accountInfoService: AccountInfoService,
     private val jwtProvider: JwtProvider
 ) {
 
@@ -41,5 +45,31 @@ class AccountController(
             ?: throw RuntimeException("학번 $studentNum 에 해당하는 Account를 찾을 수 없습니다.")
         profilePictureService.updateProfilePicture(account, file)
         return ResponseEntity.status(HttpStatus.CREATED).body("Profile picture updated successfully.")
+    }
+
+    @Operation(summary = "계정 정보 조회 API", description = "사용자의 계정정보를 조회하는 API")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    fun getAccountDetails(request: HttpServletRequest): AccountDetailResponse {
+        val accessToken = jwtProvider.resolveToken(request)
+        val authentication = jwtProvider.getAuthentication(accessToken!!)
+        val userDetails = authentication.principal as UserDetails
+        val email = userDetails.username
+        val user: AccountInfoServiceImpl.UserInfo = accountInfoService.getUserInfomation(email)
+        val account: AccountInfoServiceImpl.AccountInfo =
+            accountInfoService.getAccountInfomation(user.grade, user.classNum, user.number)
+        var response = AccountDetailResponse(
+            user.gauthAuthority,
+            user.email,
+            user.name,
+            user.grade,
+            user.classNum,
+            user.number,
+            account.studentNum,
+            account.profilePictureName,
+            account.profilePictureUrl,
+            account.daramRole
+        )
+        return response
     }
 }
