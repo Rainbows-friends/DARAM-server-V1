@@ -58,6 +58,8 @@ jobs:
                   value: ${{ secrets.AWS_S3_REGION }}
                 - name: AWS_SECRET_KEY
                   value: ${{ secrets.AWS_SECRET_KEY }}
+                - name: CLOUDFLARE_BUCKET_SUBDOMAIN
+                  value: ${{ secrets.CLOUDFLARE_BUCKET_SUBDOMAIN }}
               buildenv: []
               build: ./gradlew build
             context:
