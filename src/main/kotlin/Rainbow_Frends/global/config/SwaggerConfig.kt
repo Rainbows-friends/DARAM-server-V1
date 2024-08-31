@@ -23,4 +23,10 @@ class SwaggerConfig {
         return GroupedOpenApi.builder().group("Notice").pathsToMatch("/api/notice/**")
             .packagesToScan("Rainbow_Frends.domain.notice.controller").build()
     }
+
+    @Bean
+    fun accountApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder().group("Account").pathsToMatch("/api/account/**")
+            .packagesToScan("Rainbow_Frends.domain.account.controller").build()
+    }
 }
