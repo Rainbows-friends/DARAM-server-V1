@@ -14,4 +14,5 @@ data class AccountDetailResponse(
     val profilePictureName: String?,
     val profilePictureUrl: String?,
     val daramRole: Role?,
+    val lateNumber: Int?
 )
