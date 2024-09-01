@@ -1,5 +1,6 @@
 package Rainbow_Frends.global.config
 
+import Rainbow_Frends.global.security.filter.DevFilter
 import Rainbow_Frends.global.security.filter.JwtFilter
 import Rainbow_Frends.global.security.jwt.JwtProvider
 import dev.yangsijun.gauth.configurer.GAuthLoginConfigurer
@@ -17,7 +18,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val gAuthLoginConfigurer: GAuthLoginConfigurer<HttpSecurity>, private val jwtProvider: JwtProvider
+    private val gAuthLoginConfigurer: GAuthLoginConfigurer<HttpSecurity>,
+    private val jwtProvider: JwtProvider,
+    private val devFilter: DevFilter
 ) {
 
     @Bean
@@ -44,6 +47,7 @@ class SecurityConfig(
                     .requestMatchers("/role/teacher").hasAuthority("GAUTH_ROLE_TEACHER")
                     .anyRequest().denyAll()
             }
+            .addFilterBefore(devFilter, UsernamePasswordAuthenticationFilter::class.java) // DevFilter 추가
             .addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
 
         gAuthLoginConfigurer.configure(http)
@@ -52,33 +56,35 @@ class SecurityConfig(
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
-        val unrestrictedCorsConfig = CorsConfiguration()
-        unrestrictedCorsConfig.allowedOrigins = listOf("*")
-        unrestrictedCorsConfig.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        unrestrictedCorsConfig.allowedHeaders = listOf("Authorization", "Content-Type")
-        unrestrictedCorsConfig.allowCredentials = false
+        val unrestrictedCorsConfig = CorsConfiguration().apply {
+            allowedOrigins = listOf("*")
+            allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            allowedHeaders = listOf("Authorization", "Content-Type")
+            allowCredentials = false
+        }
 
-        val restrictedCorsConfig = CorsConfiguration()
-        restrictedCorsConfig.allowedOrigins = listOf("*")
-        restrictedCorsConfig.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        restrictedCorsConfig.allowedHeaders = listOf("Authorization", "Content-Type")
-        restrictedCorsConfig.allowCredentials = false
-        restrictedCorsConfig.exposedHeaders = listOf("Authorization")
+        val restrictedCorsConfig = CorsConfiguration().apply {
+            allowedOrigins = listOf("*")
+            allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+            allowedHeaders = listOf("Authorization", "Content-Type")
+            allowCredentials = false
+            exposedHeaders = listOf("Authorization")
+        }
 
-        val source = UrlBasedCorsConfigurationSource()
+        val source = UrlBasedCorsConfigurationSource().apply {
+            registerCorsConfiguration("/swagger-ui/**", unrestrictedCorsConfig)
+            registerCorsConfiguration("/v3/api-docs/**", unrestrictedCorsConfig)
 
-        source.registerCorsConfiguration("/swagger-ui/**", unrestrictedCorsConfig)
-        source.registerCorsConfiguration("/v3/api-docs/**", unrestrictedCorsConfig)
-
-        source.registerCorsConfiguration("/gauth/authorization", restrictedCorsConfig)
-        source.registerCorsConfiguration("/api/login/gauth/code", restrictedCorsConfig)
-        source.registerCorsConfiguration("/api/login/gauth/logout", restrictedCorsConfig)
-        source.registerCorsConfiguration("/api/login/gauth/reissue", restrictedCorsConfig)
-        source.registerCorsConfiguration("/auth/me", restrictedCorsConfig)
-        source.registerCorsConfiguration("/api/times/remaintime", restrictedCorsConfig)
-        source.registerCorsConfiguration("/api/notice", restrictedCorsConfig)
-        source.registerCorsConfiguration("/api/notice/all", restrictedCorsConfig)
-        source.registerCorsConfiguration("/api/account/**", restrictedCorsConfig)
+            registerCorsConfiguration("/gauth/authorization", restrictedCorsConfig)
+            registerCorsConfiguration("/api/login/gauth/code", restrictedCorsConfig)
+            registerCorsConfiguration("/api/login/gauth/logout", restrictedCorsConfig)
+            registerCorsConfiguration("/api/login/gauth/reissue", restrictedCorsConfig)
+            registerCorsConfiguration("/auth/me", restrictedCorsConfig)
+            registerCorsConfiguration("/api/times/remaintime", restrictedCorsConfig)
+            registerCorsConfiguration("/api/notice", restrictedCorsConfig)
+            registerCorsConfiguration("/api/notice/all", restrictedCorsConfig)
+            registerCorsConfiguration("/api/account/**", restrictedCorsConfig)
+        }
         return source
     }
 }
