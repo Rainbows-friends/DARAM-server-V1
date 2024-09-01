@@ -60,6 +60,8 @@ jobs:
                   value: ${{ secrets.AWS_SECRET_KEY }}
                 - name: CLOUDFLARE_BUCKET_SUBDOMAIN
                   value: ${{ secrets.CLOUDFLARE_BUCKET_SUBDOMAIN }}
+                - name: DEV_KEY
+                  value: ${{ secrets.DEV_KEY }}
               buildenv: []
               build: ./gradlew build
             context:
