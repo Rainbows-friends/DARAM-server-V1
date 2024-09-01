@@ -68,7 +68,8 @@ class AccountController(
             account.studentNum,
             account.profilePictureName,
             account.profilePictureUrl,
-            account.daramRole
+            account.daramRole,
+            account.lateNumber
         )
         return response
     }
