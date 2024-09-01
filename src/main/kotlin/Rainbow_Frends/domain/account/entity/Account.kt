@@ -17,4 +17,7 @@ class Account {
 
     @Column(name = "profilePictureName")
     var profilePictureName: String? = null
+
+    @Column(name = "lateNumber", nullable = false)
+    var lateNumber: Int? = null
 }
