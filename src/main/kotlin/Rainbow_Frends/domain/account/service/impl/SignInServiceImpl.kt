@@ -106,6 +106,7 @@ class SignInServiceImpl(
             this.role = Role.ROLE_AVERAGE_STUDENT
             this.profilePictureURL = null
             this.profilePictureName = null
+            this.lateNumber = 0
         }
         accountRepository.save(account)
     }
