@@ -11,4 +11,13 @@ class Account {
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     var role: Role? = null
+
+    @Column(name = "profilePictureURL")
+    var profilePictureURL: String? = null
+
+    @Column(name = "profilePictureName")
+    var profilePictureName: String? = null
+
+    @Column(name = "lateNumber", nullable = false)
+    var lateNumber: Int? = null
 }

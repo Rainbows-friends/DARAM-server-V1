@@ -7,11 +7,12 @@ import Rainbow_Frends.domain.notice.dto.request.NoticeRequest
 import Rainbow_Frends.domain.notice.entity.Notice
 import Rainbow_Frends.domain.notice.repository.NoticeRepository
 import Rainbow_Frends.domain.notice.service.NoticeService
-import jakarta.transaction.Transactional
-import org.springframework.stereotype.Service
+import Rainbow_Frends.global.annotation.ServiceWithTransaction
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 
 
-@Service
+@ServiceWithTransaction
 class NoticeServiceImpl(
     private val noticeRepository: NoticeRepository,
     private val accountRepository: AccountRepository,
@@ -22,18 +23,15 @@ class NoticeServiceImpl(
         return noticeRepository.findAll()
     }
 
-    @Transactional
-    fun createNotice(noticeRequest: NoticeRequest, user: User) {
-
+    fun createNotice(noticeRequest: NoticeRequest, user: User): ResponseEntity<Notice> {
         val studentId = generateStudentId(user)
-
         val account = accountRepository.findByStudentId(studentId)
             ?: throw RuntimeException("student_id: $studentId 에 해당하는 Account를 찾을 수 없습니다.")
-
         val notice = Notice(
             title = noticeRequest.title, content = noticeRequest.content, writer = account
         )
-        noticeRepository.save(notice)
+        val savedNotice = noticeRepository.save(notice)
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedNotice)
     }
 
     private fun generateStudentId(user: User): Int {
