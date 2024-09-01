@@ -26,7 +26,8 @@ class AccountInfoServiceImpl(
             accountinfo.studentId!!.toShort(),
             accountinfo.profilePictureName,
             accountinfo.profilePictureURL,
-            accountinfo.role
+            accountinfo.role,
+            accountinfo.lateNumber
         )
     }
 
@@ -55,6 +56,10 @@ class AccountInfoServiceImpl(
     )
 
     data class AccountInfo(
-        val studentNum: Short, val profilePictureName: String?, val profilePictureUrl: String?, val daramRole: Role?
+        val studentNum: Short,
+        val profilePictureName: String?,
+        val profilePictureUrl: String?,
+        val daramRole: Role?,
+        val lateNumber: Int?
     )
 }
