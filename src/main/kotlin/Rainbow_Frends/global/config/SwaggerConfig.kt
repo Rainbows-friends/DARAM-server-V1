@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration
 class SwaggerConfig {
     @Bean
     fun timeApi(): GroupedOpenApi {
-        return GroupedOpenApi.builder().group("times").pathsToMatch("/api/times/**")
+        return GroupedOpenApi.builder().group("Time").pathsToMatch("/api/times/**")
             .packagesToScan("Rainbow_Frends.domain.times.controller").build()
     }
 

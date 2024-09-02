@@ -26,7 +26,6 @@ class AccountController(
     private val accountInfoService: AccountInfoService,
     private val jwtProvider: JwtProvider
 ) {
-
     @Operation(summary = "프로필 사진 업데이트 API", description = "사용자의 프로필 사진을 업로드하거나 기존 사진을 업데이트하는 API")
     @ResponseStatus(HttpStatus.CREATED)
     @PatchMapping("/profile-picture")
