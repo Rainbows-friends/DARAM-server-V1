@@ -9,7 +9,7 @@ class SwaggerConfig {
     @Bean
     fun timeApi(): GroupedOpenApi {
         return GroupedOpenApi.builder().group("Time").pathsToMatch("/api/times/**")
-            .packagesToScan("Rainbow_Frends.domain.times.controller").build()
+            .packagesToScan("Rainbow_Frends.domain.time.controller").build()
     }
 
     @Bean
@@ -28,5 +28,11 @@ class SwaggerConfig {
     fun accountApi(): GroupedOpenApi {
         return GroupedOpenApi.builder().group("Account").pathsToMatch("/api/account/**")
             .packagesToScan("Rainbow_Frends.domain.account.controller").build()
+    }
+
+    @Bean
+    fun checkinApi(): GroupedOpenApi {
+        return GroupedOpenApi.builder().group("Checkin").pathsToMatch("/api/checkin/**")
+            .packagesToScan("Rainbow_Frends.domain.checkin.controller").build()
     }
 }
