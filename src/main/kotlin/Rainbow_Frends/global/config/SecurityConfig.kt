@@ -25,29 +25,24 @@ class SecurityConfig(
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        http.csrf { it.disable() }
-            .cors { it.configurationSource(corsConfigurationSource()) }
+        http.csrf { it.disable() }.cors { it.configurationSource(corsConfigurationSource()) }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { request ->
-                request.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                    .requestMatchers(
+                request.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll().requestMatchers(
                         "/gauth/authorization",
                         "/api/login/gauth/code",
                         "/api/login/gauth/logout",
                         "/api/login/gauth/reissue"
-                    ).permitAll()
-                    .requestMatchers(
+                    ).permitAll().requestMatchers(
                         "/auth/me",
                         "/api/times/remaintime",
                         "/api/notice",
                         "/api/notice/all",
-                        "/api/account/**"
-                    ).authenticated()
-                    .requestMatchers("/role/student").hasAuthority("GAUTH_ROLE_STUDENT")
-                    .requestMatchers("/role/teacher").hasAuthority("GAUTH_ROLE_TEACHER")
-                    .anyRequest().denyAll()
-            }
-            .addFilterBefore(devFilter, UsernamePasswordAuthenticationFilter::class.java) // DevFilter 추가
+                        "/api/account",
+                        "/api/account/profile-picture"
+                    ).authenticated().requestMatchers("/role/student").hasAuthority("GAUTH_ROLE_STUDENT")
+                    .requestMatchers("/role/teacher").hasAuthority("GAUTH_ROLE_TEACHER").anyRequest().denyAll()
+            }.addFilterBefore(devFilter, UsernamePasswordAuthenticationFilter::class.java) // DevFilter 추가
             .addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
 
         gAuthLoginConfigurer.configure(http)
