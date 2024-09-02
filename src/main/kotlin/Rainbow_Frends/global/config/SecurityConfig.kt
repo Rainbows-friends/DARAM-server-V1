@@ -39,7 +39,9 @@ class SecurityConfig(
                         "/api/notice",
                         "/api/notice/all",
                         "/api/account",
-                        "/api/account/profile-picture"
+                        "/api/account/profile-picture",
+                        "/api/checkin",
+                        "/api/checkin/unchecked"
                     ).authenticated().requestMatchers("/role/student").hasAuthority("GAUTH_ROLE_STUDENT")
                     .requestMatchers("/role/teacher").hasAuthority("GAUTH_ROLE_TEACHER").anyRequest().denyAll()
             }.addFilterBefore(devFilter, UsernamePasswordAuthenticationFilter::class.java) // DevFilter 추가
