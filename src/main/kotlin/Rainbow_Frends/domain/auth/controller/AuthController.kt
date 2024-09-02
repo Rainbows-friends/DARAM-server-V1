@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.ErrorResponse
 import org.springframework.web.bind.annotation.*
 
-@Tag(name = "AuthController", description = "인증 관련 API")
+@Tag(name = "인증", description = "인증 관련 API")
 @RequestMapping("/api/login/gauth")
 @RestController
 class AuthController(
