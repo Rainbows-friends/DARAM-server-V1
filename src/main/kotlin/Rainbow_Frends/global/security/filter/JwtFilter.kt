@@ -5,7 +5,6 @@ import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.slf4j.LoggerFactory
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.util.StringUtils
@@ -21,19 +20,8 @@ class JwtFilter(
         const val BEARER_PREFIX = "Bearer "
     }
 
-    private val logger = LoggerFactory.getLogger(JwtFilter::class.java)
-
     private val excludedPaths = setOf(
-        "/api/times/remaintime",
-        "/api/notice",
-        "/api/notice/all",
-        "/api/account",
-        "/api/account/profile-picture",
-        "/gauth/authorization",
-        "/api/login/gauth/code",
-        "/api/login/gauth/logout",
-        "/api/login/gauth/reissue",
-        "/page"
+        "/gauth/authorization", "/api/login/gauth/code", "/api/login/gauth/logout", "/api/login/gauth/reissue", "/page"
     )
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
