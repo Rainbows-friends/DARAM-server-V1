@@ -7,8 +7,7 @@ import java.util.*
 @Entity
 data class User(
     @Id @GeneratedValue(generator = "UUID") @GenericGenerator(
-        name = "UUID",
-        strategy = "org.hibernate.id.UUIDGenerator"
+        name = "UUID", strategy = "org.hibernate.id.UUIDGenerator"
     ) val id: UUID? = null,
 
     val email: String? = null,
