@@ -13,6 +13,7 @@ import Rainbow_Frends.domain.account.presentation.dto.response.TokenResponse
 import Rainbow_Frends.domain.account.repository.jpa.AccountRepository
 import Rainbow_Frends.domain.account.repository.redis.RefreshRepository
 import Rainbow_Frends.domain.account.service.SignInService
+import Rainbow_Frends.domain.checkin.service.CheckinService
 import Rainbow_Frends.global.annotation.ServiceWithTransaction
 import Rainbow_Frends.global.security.jwt.JwtProvider
 import gauth.GAuth
@@ -27,7 +28,8 @@ class SignInServiceImpl(
     private val refreshRepository: RefreshRepository,
     private val userRepository: UserRepository,
     private val accountRepository: AccountRepository,
-    private val jwtProvider: JwtProvider
+    private val jwtProvider: JwtProvider,
+    private val checkinService: CheckinService // CheckinService 주입
 ) : SignInService {
 
     @Value("\${GAuth-CLIENT-ID}")
@@ -47,7 +49,6 @@ class SignInServiceImpl(
             val userInfo = gAuth.getUserInfo(gAuthToken.accessToken)
             val user = userRepository.findByEmail(userInfo.email)?.let { it } ?: saveUser(userInfo)
             ?: throw UserNotFoundException()
-
             val tokenResponse = user.id?.let { jwtProvider.generateTokenDto(it) } ?: throw UserNotFoundException()
             saveRefreshToken(tokenResponse, user)
             saveAccount(user)
@@ -58,11 +59,15 @@ class SignInServiceImpl(
     }
 
     private fun saveUser(gAuthUserInfo: GAuthUserInfo): User? {
-        return when (gAuthUserInfo.role) {
+        val user = when (gAuthUserInfo.role) {
             "ROLE_STUDENT" -> saveStudent(gAuthUserInfo)
             "ROLE_TEACHER" -> saveTeacher(gAuthUserInfo)
             else -> null
         }
+        user?.let {
+            checkinService.addNewUserToCheckin(it.id!!)
+        }
+        return user
     }
 
     private fun saveStudent(gAuthUserInfo: GAuthUserInfo): User {
