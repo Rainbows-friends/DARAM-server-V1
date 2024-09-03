@@ -20,4 +20,10 @@ class Account {
 
     @Column(name = "lateNumber", nullable = false)
     var lateNumber: Int? = null
+
+    @Column(name = "floor")
+    var floor: Int? = null
+
+    @Column(name = "roomNumber")
+    var roomNumber: Int? = null
 }
