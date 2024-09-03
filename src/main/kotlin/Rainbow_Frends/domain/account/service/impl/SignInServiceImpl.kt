@@ -20,7 +20,6 @@ import gauth.GAuth
 import gauth.GAuthUserInfo
 import gauth.exception.GAuthException
 import org.springframework.beans.factory.annotation.Value
-import java.util.*
 
 @ServiceWithTransaction
 class SignInServiceImpl(
@@ -47,7 +46,7 @@ class SignInServiceImpl(
                 signInRequest.code, clientId, clientSecret, redirectUri
             )
             val userInfo = gAuth.getUserInfo(gAuthToken.accessToken)
-            val user = userRepository.findByEmail(userInfo.email)?.let { it } ?: saveUser(userInfo)
+            val user = userRepository.findByEmail(userInfo.email) ?: saveUser(userInfo)
             ?: throw UserNotFoundException()
             val tokenResponse = user.id?.let { jwtProvider.generateTokenDto(it) } ?: throw UserNotFoundException()
             saveRefreshToken(tokenResponse, user)
@@ -64,7 +63,6 @@ class SignInServiceImpl(
             else -> null
         }
         return user?.let {
-            // User 저장 후 UUID를 받아온 후에 Account와 Checkin을 저장합니다.
             saveAccountAndCheckin(it)
             it
         }
@@ -77,7 +75,7 @@ class SignInServiceImpl(
             studentNum = StudentNum(gAuthUserInfo.grade, gAuthUserInfo.classNum, gAuthUserInfo.num),
             authority = Authority.ROLE_STUDENT
         )
-        return userRepository.save(user) // 저장 후 UUID 생성
+        return userRepository.save(user)
     }
 
     private fun saveTeacher(gAuthUserInfo: GAuthUserInfo): User {
@@ -87,11 +85,10 @@ class SignInServiceImpl(
             studentNum = StudentNum(gAuthUserInfo.grade, gAuthUserInfo.classNum, gAuthUserInfo.num),
             authority = Authority.ROLE_TEACHER
         )
-        return userRepository.save(teacher) // 저장 후 UUID 생성
+        return userRepository.save(teacher)
     }
 
     private fun saveAccountAndCheckin(user: User) {
-        // Account 저장
         val studentNum = user.studentNum ?: throw IllegalArgumentException("StudentNum cannot be null")
         val studentId = (studentNum.grade * 1000) + (studentNum.classNum * 100) + studentNum.number
         val account = Account().apply {
@@ -104,7 +101,6 @@ class SignInServiceImpl(
             this.roomNumber = null
         }
         accountRepository.save(account)
-
         checkinService.addNewUserToCheckin(user.id!!)
     }
 
