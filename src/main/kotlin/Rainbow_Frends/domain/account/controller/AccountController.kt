@@ -10,6 +10,7 @@ import Rainbow_Frends.global.security.jwt.JwtProvider
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.userdetails.UserDetails
@@ -26,6 +27,7 @@ class AccountController(
     private val accountInfoService: AccountInfoService,
     private val jwtProvider: JwtProvider
 ) {
+    private val logger = LoggerFactory.getLogger(AccountController::class.java)
     @Operation(summary = "프로필 사진 업데이트 API", description = "사용자의 프로필 사진을 업로드하거나 기존 사진을 업데이트하는 API")
     @ResponseStatus(HttpStatus.CREATED)
     @PatchMapping("/profile-picture")
@@ -49,27 +51,32 @@ class AccountController(
     @Operation(summary = "계정 정보 조회 API", description = "사용자의 계정정보를 조회하는 API")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    fun getAccountDetails(request: HttpServletRequest): AccountDetailResponse {
+    fun getAccountDetails(request: HttpServletRequest): AccountDetailResponse? {
         val accessToken = jwtProvider.resolveToken(request)
         val authentication = jwtProvider.getAuthentication(accessToken!!)
         val userDetails = authentication.principal as UserDetails
         val email = userDetails.username
+        logger.info(email)
         val user: AccountInfoServiceImpl.UserInfo = accountInfoService.getUserInfomation(email)
-        val account: AccountInfoServiceImpl.AccountInfo =
+        val account: AccountInfoServiceImpl.AccountInfo? =
             accountInfoService.getAccountInfomation(user.grade, user.classNum, user.number)
-        var response = AccountDetailResponse(
-            user.gauthAuthority,
-            user.email,
-            user.name,
-            user.grade,
-            user.classNum,
-            user.number,
-            account.studentNum,
-            account.profilePictureName,
-            account.profilePictureUrl,
-            account.daramRole,
-            account.lateNumber
-        )
+        var response = account?.let {
+            AccountDetailResponse(
+                user.gauthAuthority,
+                user.email,
+                user.name,
+                user.grade,
+                user.classNum,
+                user.number,
+                it.studentNum,
+                account.profilePictureName,
+                account.profilePictureUrl,
+                account.daramRole,
+                account.lateNumber,
+                account.roomNumber,
+                account.floor?.toByte()
+            )
+        }
         return response
     }
 }

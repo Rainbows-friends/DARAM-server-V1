@@ -11,8 +11,10 @@ data class AccountDetailResponse(
     val classNum: Byte,
     val number: Byte,
     val studentId: Short,
-    val profilePictureName: String?,
-    val profilePictureUrl: String?,
-    val daramRole: Role?,
-    val lateNumber: Int?
+    val profilePictureName: String? = null,
+    val profilePictureUrl: String? = null,
+    val daramRole: Role? = null,
+    val lateNumber: Int? = 0,
+    val roomNumber: Int? = null,
+    val floor: Byte? = null
 )

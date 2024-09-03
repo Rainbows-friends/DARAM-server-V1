@@ -13,6 +13,7 @@ import Rainbow_Frends.domain.account.presentation.dto.response.TokenResponse
 import Rainbow_Frends.domain.account.repository.jpa.AccountRepository
 import Rainbow_Frends.domain.account.repository.redis.RefreshRepository
 import Rainbow_Frends.domain.account.service.SignInService
+import Rainbow_Frends.domain.checkin.service.CheckinService
 import Rainbow_Frends.global.annotation.ServiceWithTransaction
 import Rainbow_Frends.global.security.jwt.JwtProvider
 import gauth.GAuth
@@ -27,7 +28,8 @@ class SignInServiceImpl(
     private val refreshRepository: RefreshRepository,
     private val userRepository: UserRepository,
     private val accountRepository: AccountRepository,
-    private val jwtProvider: JwtProvider
+    private val jwtProvider: JwtProvider,
+    private val checkinService: CheckinService
 ) : SignInService {
 
     @Value("\${GAuth-CLIENT-ID}")
@@ -47,10 +49,8 @@ class SignInServiceImpl(
             val userInfo = gAuth.getUserInfo(gAuthToken.accessToken)
             val user = userRepository.findByEmail(userInfo.email)?.let { it } ?: saveUser(userInfo)
             ?: throw UserNotFoundException()
-
             val tokenResponse = user.id?.let { jwtProvider.generateTokenDto(it) } ?: throw UserNotFoundException()
             saveRefreshToken(tokenResponse, user)
-            saveAccount(user)
             return tokenResponse
         } catch (e: GAuthException) {
             throw GAuthException(e.code)
@@ -58,35 +58,54 @@ class SignInServiceImpl(
     }
 
     private fun saveUser(gAuthUserInfo: GAuthUserInfo): User? {
-        return when (gAuthUserInfo.role) {
+        val user = when (gAuthUserInfo.role) {
             "ROLE_STUDENT" -> saveStudent(gAuthUserInfo)
             "ROLE_TEACHER" -> saveTeacher(gAuthUserInfo)
             else -> null
+        }
+        return user?.let {
+            // User 저장 후 UUID를 받아온 후에 Account와 Checkin을 저장합니다.
+            saveAccountAndCheckin(it)
+            it
         }
     }
 
     private fun saveStudent(gAuthUserInfo: GAuthUserInfo): User {
         val user = User(
-            id = UUID.randomUUID(),
             email = gAuthUserInfo.email,
             name = gAuthUserInfo.name,
             studentNum = StudentNum(gAuthUserInfo.grade, gAuthUserInfo.classNum, gAuthUserInfo.num),
             authority = Authority.ROLE_STUDENT
         )
-        userRepository.save(user)
-        return user
+        return userRepository.save(user) // 저장 후 UUID 생성
     }
 
     private fun saveTeacher(gAuthUserInfo: GAuthUserInfo): User {
         val teacher = User(
-            id = UUID.randomUUID(),
             email = gAuthUserInfo.email,
             name = gAuthUserInfo.name,
             studentNum = StudentNum(gAuthUserInfo.grade, gAuthUserInfo.classNum, gAuthUserInfo.num),
             authority = Authority.ROLE_TEACHER
         )
-        userRepository.save(teacher)
-        return teacher
+        return userRepository.save(teacher) // 저장 후 UUID 생성
+    }
+
+    private fun saveAccountAndCheckin(user: User) {
+        // Account 저장
+        val studentNum = user.studentNum ?: throw IllegalArgumentException("StudentNum cannot be null")
+        val studentId = (studentNum.grade * 1000) + (studentNum.classNum * 100) + studentNum.number
+        val account = Account().apply {
+            this.studentId = studentId
+            this.role = Role.ROLE_AVERAGE_STUDENT
+            this.profilePictureURL = null
+            this.profilePictureName = null
+            this.lateNumber = 0
+            this.floor = null
+            this.roomNumber = null
+        }
+        accountRepository.save(account)
+
+        checkinService.addNewUserToCheckin(user.id!!)
     }
 
     private fun saveRefreshToken(tokenResponse: TokenResponse, user: User) {
@@ -96,18 +115,5 @@ class SignInServiceImpl(
             )
         }
         refreshToken?.let { refreshRepository.save(it) }
-    }
-
-    private fun saveAccount(user: User) {
-        val studentNum = user.studentNum ?: throw IllegalArgumentException("StudentNum cannot be null")
-        val studentId = (studentNum.grade * 1000) + (studentNum.classNum * 100) + studentNum.number
-        val account = Account().apply {
-            this.studentId = studentId
-            this.role = Role.ROLE_AVERAGE_STUDENT
-            this.profilePictureURL = null
-            this.profilePictureName = null
-            this.lateNumber = 0
-        }
-        accountRepository.save(account)
     }
 }
