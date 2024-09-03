@@ -36,12 +36,14 @@ class CheckinServiceImpl(
 
     override fun createCheckinKeyForDate(date: LocalDate): Boolean {
         val users = userRepository.findAll()
-        val checkinsForDate = users.map { user ->
-            Checkin(
-                user = user,
-                checkintruefalse = false,
-                checkinDate = date
-            )
+        val checkinsForDate = users.mapNotNull { user ->
+            if (checkinRepository.findByUserAndCheckinDate(user, date).isEmpty()) {
+                Checkin(
+                    user = user, checkintruefalse = false, checkinDate = date
+                )
+            } else {
+                null
+            }
         }
         checkinRepository.saveAll(checkinsForDate)
         return true
