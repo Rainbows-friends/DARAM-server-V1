@@ -44,7 +44,7 @@ class SecurityConfig(
                         "/api/checkin/unchecked"
                     ).authenticated().requestMatchers("/role/student").hasAuthority("GAUTH_ROLE_STUDENT")
                     .requestMatchers("/role/teacher").hasAuthority("GAUTH_ROLE_TEACHER").anyRequest().denyAll()
-            }.addFilterBefore(devFilter, UsernamePasswordAuthenticationFilter::class.java) // DevFilter 추가
+            }.addFilterBefore(devFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter::class.java)
 
         gAuthLoginConfigurer.configure(http)
