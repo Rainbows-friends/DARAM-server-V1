@@ -7,7 +7,15 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   jpa:
-    hibernate: ddl-auto:update
+    hibernate:
+      cache:
+        use_second_level_cache: true
+        use_query_cache: true
+      ddl-auto: update
+      generate_statistics: true
+    javax:
+      cache:
+        provider: org.ehcache.jsr107.EhcacheCachingProvider
     show-sql: true
     properties:
       hibernate:
@@ -44,11 +52,15 @@ gauth:
     client-id: ${GAuth_CLIENT_ID}
     client-secret: ${GAuth_CLIENT_SECRET}
     redirect-uri: ${GAuth_REDIRECT_URI}
+jwt:
+  secret: ${JWT_SECRET}
+management:
+  endpoint:
+    health:
+      show-details: always
 GAuth-CLIENT-ID: ${GAuth_CLIENT_ID}
 GAuth-CLIENT-SECRET: ${GAuth_CLIENT_SECRET}
 GAuth-REDIRECT-URI: ${GAuth_REDIRECT_URI}
-jwt:
-  secret: ${JWT_SECRET}
 AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL}
 AWS_S3_REGION: ${AWS_S3_REGION}
 AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
