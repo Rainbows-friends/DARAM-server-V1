@@ -37,6 +37,7 @@ class SecurityConfig(
                         "/auth/me",
                         "/api/times/remaintime",
                         "/api/notice",
+                        "/api/notice/{id}",
                         "/api/notice/all",
                         "/api/account",
                         "/api/account/profile-picture",
