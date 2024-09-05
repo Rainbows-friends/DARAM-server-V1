@@ -1,4 +1,4 @@
-package Rainbow_Frends.domain.User.entity
+package Rainbow_Frends.domain.user.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable

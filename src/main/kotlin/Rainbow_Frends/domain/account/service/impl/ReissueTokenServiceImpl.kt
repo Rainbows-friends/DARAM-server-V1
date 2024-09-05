@@ -1,6 +1,6 @@
 package Rainbow_Frends.domain.account.service.impl
 
-import Rainbow_Frends.domain.User.repository.UserRepository
+import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.domain.account.Token.RefreshToken
 import Rainbow_Frends.domain.account.exception.ExpiredRefreshTokenException
 import Rainbow_Frends.domain.account.exception.UserNotFoundException

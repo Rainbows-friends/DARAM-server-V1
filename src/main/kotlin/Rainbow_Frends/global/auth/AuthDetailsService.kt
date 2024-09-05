@@ -1,6 +1,6 @@
 package Rainbow_Frends.global.auth
 
-import Rainbow_Frends.domain.User.repository.UserRepository
+import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.global.exception.DARAMException
 import Rainbow_Frends.global.exception.ErrorCode
 import Rainbow_Frends.global.log.logger
