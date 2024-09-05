@@ -1,19 +1,16 @@
 package Rainbow_Frends.domain.account.controller
 
-import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.domain.account.presentation.dto.response.AccountDetailResponse
-import Rainbow_Frends.domain.account.repository.jpa.AccountRepository
 import Rainbow_Frends.domain.account.service.AccountInfoService
 import Rainbow_Frends.domain.account.service.ProfilePictureService
 import Rainbow_Frends.domain.account.service.impl.AccountInfoServiceImpl
-import Rainbow_Frends.global.security.jwt.JwtProvider
+import Rainbow_Frends.global.auth.GetUser
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
@@ -21,11 +18,9 @@ import org.springframework.web.multipart.MultipartFile
 @Tag(name = "계정", description = "계정정보 관련 API")
 @RequestMapping("/api/account")
 class AccountController(
-    private val userRepository: UserRepository,
-    private val accountRepository: AccountRepository,
     private val profilePictureService: ProfilePictureService,
     private val accountInfoService: AccountInfoService,
-    private val jwtProvider: JwtProvider
+    private val getUser: GetUser
 ) {
     private val logger = LoggerFactory.getLogger(AccountController::class.java)
 
@@ -43,10 +38,7 @@ class AccountController(
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     fun getAccountDetails(request: HttpServletRequest): AccountDetailResponse? {
-        val accessToken = jwtProvider.resolveToken(request)
-        val authentication = jwtProvider.getAuthentication(accessToken!!)
-        val userDetails = authentication.principal as UserDetails
-        val email = userDetails.username
+        val email = getUser.getUser(request).username
         logger.info(email)
         val user: AccountInfoServiceImpl.UserInfo = accountInfoService.getUserInfomation(email)
         val account: AccountInfoServiceImpl.AccountInfo? =
