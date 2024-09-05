@@ -5,13 +5,13 @@ import Rainbow_Frends.domain.account.repository.jpa.AccountRepository
 import Rainbow_Frends.domain.notice.dto.request.NoticeRequest
 import Rainbow_Frends.domain.notice.entity.Notice
 import Rainbow_Frends.domain.notice.service.Impl.NoticeServiceImpl
-import Rainbow_Frends.global.security.jwt.JwtProvider
+import Rainbow_Frends.global.auth.GetStudentId
+import Rainbow_Frends.global.auth.GetUser
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 
 @Tag(name = "공지", description = "공지 관련 API")
@@ -19,8 +19,9 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/notice")
 class NoticeController(
     private val noticeService: NoticeServiceImpl,
-    private val jwtProvider: JwtProvider,
-    private val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository,
+    private val getStudentId: GetStudentId,
+    private val getUser: GetUser
 ) {
 
     @Operation(summary = "공지 조회 API", description = "공지의 제목, 글쓴이, 본문, 작성시각 조회 API")
@@ -34,10 +35,7 @@ class NoticeController(
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     fun postNotice(@RequestBody noticeRequest: NoticeRequest, request: HttpServletRequest): ResponseEntity<Notice> {
-        val accessToken = jwtProvider.resolveToken(request)
-        val authentication = jwtProvider.getAuthentication(accessToken!!)
-        val userDetails = authentication.principal as UserDetails
-        val user = noticeService.getUserByUsername(userDetails.username)
+        val user = noticeService.getUserByUsername(getUser.getUser(request).username)
         return noticeService.createNotice(noticeRequest, user)
     }
 
@@ -59,13 +57,9 @@ class NoticeController(
     fun updateNotice(
         @PathVariable id: Long, @RequestBody noticeRequest: NoticeRequest, request: HttpServletRequest
     ): ResponseEntity<Notice> {
-        val accessToken = jwtProvider.resolveToken(request)
-        val authentication = jwtProvider.getAuthentication(accessToken!!)
-        val userDetails = authentication.principal as UserDetails
-        val user = noticeService.getUserByUsername(userDetails.username)
-        val studentId =
-            ((user.studentNum!!.grade) * 1000) + ((user.studentNum.classNum) * 100) + ((user.studentNum.number))
-        val account: Account? = accountRepository.findByStudentId(studentId)
+        val user = noticeService.getUserByUsername(getUser.getUser(request).username)
+        val studentId = getStudentId.getStudentId(user.email!!)
+        val account: Account? = studentId.let { accountRepository.findByStudentId(it) }
         val updatedNotice = account?.let { noticeService.updateNotice(id, noticeRequest, it) }
         return if (updatedNotice != null) {
             ResponseEntity.ok(updatedNotice)
