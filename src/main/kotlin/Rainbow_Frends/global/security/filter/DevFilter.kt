@@ -1,6 +1,6 @@
 package Rainbow_Frends.global.security.filter
 
-import Rainbow_Frends.domain.User.repository.UserRepository
+import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.global.security.jwt.JwtProvider
 import jakarta.servlet.FilterChain
 import jakarta.servlet.ServletException

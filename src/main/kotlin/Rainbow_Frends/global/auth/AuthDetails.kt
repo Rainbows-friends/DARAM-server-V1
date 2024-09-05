@@ -1,6 +1,6 @@
 package Rainbow_Frends.global.auth
 
-import Rainbow_Frends.domain.User.entity.User
+import Rainbow_Frends.domain.user.entity.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails

@@ -1,7 +1,7 @@
 package Rainbow_Frends.domain.account.util
 
-import Rainbow_Frends.domain.User.entity.User
-import Rainbow_Frends.domain.User.repository.UserRepository
+import Rainbow_Frends.domain.user.entity.User
+import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.domain.account.exception.UserNotFoundException
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component

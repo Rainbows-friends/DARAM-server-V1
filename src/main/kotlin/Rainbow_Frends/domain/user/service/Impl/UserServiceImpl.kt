@@ -1,8 +1,8 @@
-package Rainbow_Frends.domain.User.service.Impl
+package Rainbow_Frends.domain.user.service.Impl
 
-import Rainbow_Frends.domain.User.entity.User
-import Rainbow_Frends.domain.User.repository.UserRepository
-import Rainbow_Frends.domain.User.service.UserService
+import Rainbow_Frends.domain.user.entity.User
+import Rainbow_Frends.domain.user.repository.UserRepository
+import Rainbow_Frends.domain.user.service.UserService
 import Rainbow_Frends.domain.checkin.service.CheckinService
 import org.springframework.stereotype.Service
 

@@ -1,7 +1,7 @@
 package Rainbow_Frends.domain.notice.service.Impl
 
-import Rainbow_Frends.domain.User.entity.User
-import Rainbow_Frends.domain.User.repository.UserRepository
+import Rainbow_Frends.domain.user.entity.User
+import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.domain.account.entity.Account
 import Rainbow_Frends.domain.account.entity.Role
 import Rainbow_Frends.domain.account.repository.jpa.AccountRepository

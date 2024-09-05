@@ -38,7 +38,7 @@ logging:
     root: INFO
     org.springframework.web: DEBUG
   file:
-    path: /src/main/resources/log
+    path: ./logs/application.log
 gauth:
   security:
     client-id: ${GAuth_CLIENT_ID}

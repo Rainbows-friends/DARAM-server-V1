@@ -1,6 +1,6 @@
 package Rainbow_Frends.domain.account.presentation.dto.response
 
-import Rainbow_Frends.domain.User.entity.Authority
+import Rainbow_Frends.domain.user.entity.Authority
 import Rainbow_Frends.domain.account.entity.Role
 
 data class AccountDetailResponse(

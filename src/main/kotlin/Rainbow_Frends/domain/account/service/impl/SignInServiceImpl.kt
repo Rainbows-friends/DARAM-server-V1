@@ -1,9 +1,9 @@
 package Rainbow_Frends.domain.account.service.impl
 
-import Rainbow_Frends.domain.User.entity.Authority
-import Rainbow_Frends.domain.User.entity.StudentNum
-import Rainbow_Frends.domain.User.entity.User
-import Rainbow_Frends.domain.User.repository.UserRepository
+import Rainbow_Frends.domain.user.entity.Authority
+import Rainbow_Frends.domain.user.entity.StudentNum
+import Rainbow_Frends.domain.user.entity.User
+import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.domain.account.Token.RefreshToken
 import Rainbow_Frends.domain.account.entity.Account
 import Rainbow_Frends.domain.account.entity.Role

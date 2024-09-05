@@ -1,6 +1,6 @@
 package Rainbow_Frends.domain.checkin.service.Impl
 
-import Rainbow_Frends.domain.User.repository.UserRepository
+import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.domain.account.repository.jpa.AccountRepository
 import Rainbow_Frends.domain.checkin.entity.Checkin
 import Rainbow_Frends.domain.checkin.repository.CheckinRepository
@@ -39,7 +39,7 @@ class CheckinServiceImpl(
         val checkinsForDate = users.mapNotNull { user ->
             if (checkinRepository.findByUserAndCheckinDate(user, date).isEmpty()) {
                 Checkin(
-                    user = user, checkintruefalse = false, checkinDate = date
+                    user = user, checkinStatus = false, checkinDate = date
                 )
             } else {
                 null
@@ -56,10 +56,10 @@ class CheckinServiceImpl(
         val checkins = mutableListOf<Checkin>()
 
         if (checkinRepository.findByUserAndCheckinDate(user, today).isEmpty()) {
-            checkins.add(Checkin(user = user, checkintruefalse = false, checkinDate = today))
+            checkins.add(Checkin(user = user, checkinStatus = false, checkinDate = today))
         }
         if (checkinRepository.findByUserAndCheckinDate(user, tomorrow).isEmpty()) {
-            checkins.add(Checkin(user = user, checkintruefalse = false, checkinDate = tomorrow))
+            checkins.add(Checkin(user = user, checkinStatus = false, checkinDate = tomorrow))
         }
 
         checkinRepository.saveAll(checkins)
@@ -76,7 +76,7 @@ class CheckinServiceImpl(
 
     private fun incrementLateNumberForUncheckedStudents() {
         val today = LocalDate.now()
-        val uncheckedCheckins = checkinRepository.findByCheckintruefalseAndCheckinDate(false, today)
+        val uncheckedCheckins = checkinRepository.findByCheckinStatusAndCheckinDate(false, today)
         uncheckedCheckins.forEach { checkin ->
             val account = accountRepository.findByStudentId(checkin.user.studentNum!!.generateStudentId())
             account?.let {
