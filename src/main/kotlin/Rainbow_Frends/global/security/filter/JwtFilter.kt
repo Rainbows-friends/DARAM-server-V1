@@ -21,7 +21,12 @@ class JwtFilter(
     }
 
     private val excludedPaths = setOf(
-        "/gauth/authorization", "/api/login/gauth/code", "/api/login/gauth/logout", "/api/login/gauth/reissue", "/page"
+        "/gauth/authorization",
+        "/api/login/gauth/code",
+        "/api/login/gauth/logout",
+        "/api/login/gauth/reissue",
+        "/page",
+        "/actuator/health"
     )
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
