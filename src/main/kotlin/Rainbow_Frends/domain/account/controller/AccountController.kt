@@ -34,6 +34,14 @@ class AccountController(
         return ResponseEntity.status(HttpStatus.CREATED).body("Profile picture updated successfully.")
     }
 
+    @Operation(summary = "프로필 사진 삭제 API", description = "사용자의 프로필 사진을 삭제하는 API")
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/profile-picture")
+    fun deleteProfilePicture(request: HttpServletRequest): ResponseEntity<String> {
+        profilePictureService.deleteProfilePicture(request)
+        return ResponseEntity.status(HttpStatus.OK).body("Profile picture delete successfully")
+    }
+
     @Operation(summary = "계정 정보 조회 API", description = "사용자의 계정정보를 조회하는 API")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping

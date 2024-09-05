@@ -6,4 +6,5 @@ import org.springframework.web.multipart.MultipartFile
 
 interface ProfilePictureService {
     fun updateProfilePicture(request: HttpServletRequest, file: MultipartFile)
+    fun deleteProfilePicture(request: HttpServletRequest)
 }
