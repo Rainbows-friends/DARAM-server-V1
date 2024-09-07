@@ -1,10 +1,10 @@
 package Rainbow_Frends.domain.account.service.impl
 
-import Rainbow_Frends.domain.account.entity.Role
 import Rainbow_Frends.domain.account.exception.UserNotFoundException
+import Rainbow_Frends.domain.account.presentation.dto.AccountInfo
+import Rainbow_Frends.domain.account.presentation.dto.UserInfo
 import Rainbow_Frends.domain.account.repository.jpa.AccountRepository
 import Rainbow_Frends.domain.account.service.AccountInfoService
-import Rainbow_Frends.domain.user.entity.Authority
 import Rainbow_Frends.domain.user.entity.User
 import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.global.annotation.ServiceWithTransaction
@@ -59,23 +59,4 @@ class AccountInfoServiceImpl(
             studentNum.number.toByte()
         )
     }
-
-    data class UserInfo(
-        val gauthAuthority: Authority?,
-        val email: String?,
-        val name: String?,
-        val grade: Byte,
-        val classNum: Byte,
-        val number: Byte
-    )
-
-    data class AccountInfo(
-        val studentNum: Short,
-        val profilePictureName: String?,
-        val profilePictureUrl: String?,
-        val daramRole: Role?,
-        val lateNumber: Int?,
-        val roomNumber: Int?,
-        val floor: Int?
-    )
 }
