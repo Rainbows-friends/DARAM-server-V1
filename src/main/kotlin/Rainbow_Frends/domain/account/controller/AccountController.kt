@@ -1,9 +1,10 @@
 package Rainbow_Frends.domain.account.controller
 
+import Rainbow_Frends.domain.account.presentation.dto.AccountInfo
+import Rainbow_Frends.domain.account.presentation.dto.UserInfo
 import Rainbow_Frends.domain.account.presentation.dto.response.AccountDetailResponse
 import Rainbow_Frends.domain.account.service.AccountInfoService
 import Rainbow_Frends.domain.account.service.ProfilePictureService
-import Rainbow_Frends.domain.account.service.impl.AccountInfoServiceImpl
 import Rainbow_Frends.global.auth.GetUser
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -48,10 +49,9 @@ class AccountController(
     fun getAccountDetails(request: HttpServletRequest): AccountDetailResponse? {
         val email = getUser.getUser(request).username
         logger.info(email)
-        val user: AccountInfoServiceImpl.UserInfo = accountInfoService.getUserInfomation(email)
-        val account: AccountInfoServiceImpl.AccountInfo? =
-            accountInfoService.getAccountInfomation(user.grade, user.classNum, user.number)
-        var response = account?.let {
+        val user: UserInfo = accountInfoService.getUserInfomation(email)
+        val account: AccountInfo? = accountInfoService.getAccountInfomation(user.grade, user.classNum, user.number)
+        val response = account?.let {
             AccountDetailResponse(
                 user.gauthAuthority,
                 user.email,
