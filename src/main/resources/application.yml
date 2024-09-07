@@ -58,6 +58,11 @@ management:
   endpoint:
     health:
       show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
 GAuth-CLIENT-ID: ${GAuth_CLIENT_ID}
 GAuth-CLIENT-SECRET: ${GAuth_CLIENT_SECRET}
 GAuth-REDIRECT-URI: ${GAuth_REDIRECT_URI}
