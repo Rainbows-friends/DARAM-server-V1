@@ -28,7 +28,7 @@ class SecurityConfig(
         http.csrf { it.disable() }.cors { it.configurationSource(corsConfigurationSource()) }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { request ->
-                request.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/actuator/health").permitAll()
+                request.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/actuator/**").permitAll()
                     .requestMatchers(
                         "/gauth/authorization",
                         "/api/login/gauth/code",
