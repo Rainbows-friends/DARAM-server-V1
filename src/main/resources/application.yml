@@ -58,6 +58,11 @@ management:
   endpoint:
     health:
       show-details: always
+    web:
+      exposure:
+        include: '*'
+    prometheus:
+      enabled: true
   endpoints:
     web:
       exposure:
