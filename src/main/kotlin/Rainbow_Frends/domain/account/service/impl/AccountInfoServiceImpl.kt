@@ -1,12 +1,12 @@
 package Rainbow_Frends.domain.account.service.impl
 
-import Rainbow_Frends.domain.user.entity.Authority
-import Rainbow_Frends.domain.user.entity.User
-import Rainbow_Frends.domain.user.repository.UserRepository
-import Rainbow_Frends.domain.account.entity.Role
 import Rainbow_Frends.domain.account.exception.UserNotFoundException
+import Rainbow_Frends.domain.account.presentation.dto.AccountInfo
+import Rainbow_Frends.domain.account.presentation.dto.UserInfo
 import Rainbow_Frends.domain.account.repository.jpa.AccountRepository
 import Rainbow_Frends.domain.account.service.AccountInfoService
+import Rainbow_Frends.domain.user.entity.User
+import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.global.annotation.ServiceWithTransaction
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -21,8 +21,8 @@ class AccountInfoServiceImpl(
     private val logger = LoggerFactory.getLogger(AccountInfoServiceImpl::class.java)
 
     override fun getAccountInfomation(grade: Byte, classNum: Byte, number: Byte): AccountInfo? {
-        val studentNum: String = ((grade * 1000) + (classNum * 100)+ number).toString()
-        val accountinfo = accountRepository.findByStudentId(studentNum.toInt())
+        val studentNum: Int = ((grade * 1000) + (classNum * 100) + number)
+        val accountinfo = accountRepository.findByStudentId(studentNum)
         if (accountinfo == null) {
             logger.error("Account not found for student number: $studentNum")
             throw UserNotFoundException()
@@ -59,23 +59,4 @@ class AccountInfoServiceImpl(
             studentNum.number.toByte()
         )
     }
-
-    data class UserInfo(
-        val gauthAuthority: Authority?,
-        val email: String?,
-        val name: String?,
-        val grade: Byte,
-        val classNum: Byte,
-        val number: Byte
-    )
-
-    data class AccountInfo(
-        val studentNum: Short,
-        val profilePictureName: String?,
-        val profilePictureUrl: String?,
-        val daramRole: Role?,
-        val lateNumber: Int?,
-        val roomNumber: Int?,
-        val floor: Int?
-    )
 }

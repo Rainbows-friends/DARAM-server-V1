@@ -1,9 +1,10 @@
 package Rainbow_Frends.domain.account.controller
 
+import Rainbow_Frends.domain.account.presentation.dto.AccountInfo
+import Rainbow_Frends.domain.account.presentation.dto.UserInfo
 import Rainbow_Frends.domain.account.presentation.dto.response.AccountDetailResponse
 import Rainbow_Frends.domain.account.service.AccountInfoService
 import Rainbow_Frends.domain.account.service.ProfilePictureService
-import Rainbow_Frends.domain.account.service.impl.AccountInfoServiceImpl
 import Rainbow_Frends.global.auth.GetUser
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -34,16 +35,23 @@ class AccountController(
         return ResponseEntity.status(HttpStatus.CREATED).body("Profile picture updated successfully.")
     }
 
+    @Operation(summary = "프로필 사진 삭제 API", description = "사용자의 프로필 사진을 삭제하는 API")
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/profile-picture")
+    fun deleteProfilePicture(request: HttpServletRequest): ResponseEntity<String> {
+        profilePictureService.deleteProfilePicture(request)
+        return ResponseEntity.status(HttpStatus.OK).body("Profile picture delete successfully")
+    }
+
     @Operation(summary = "계정 정보 조회 API", description = "사용자의 계정정보를 조회하는 API")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     fun getAccountDetails(request: HttpServletRequest): AccountDetailResponse? {
         val email = getUser.getUser(request).username
         logger.info(email)
-        val user: AccountInfoServiceImpl.UserInfo = accountInfoService.getUserInfomation(email)
-        val account: AccountInfoServiceImpl.AccountInfo? =
-            accountInfoService.getAccountInfomation(user.grade, user.classNum, user.number)
-        var response = account?.let {
+        val user: UserInfo = accountInfoService.getUserInfomation(email)
+        val account: AccountInfo? = accountInfoService.getAccountInfomation(user.grade, user.classNum, user.number)
+        val response = account?.let {
             AccountDetailResponse(
                 user.gauthAuthority,
                 user.email,
