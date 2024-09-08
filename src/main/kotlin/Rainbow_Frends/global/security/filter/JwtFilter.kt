@@ -26,7 +26,8 @@ class JwtFilter(
         "/api/login/gauth/logout",
         "/api/login/gauth/reissue",
         "/page",
-        "/actuator/health"
+        "/actuator/health",
+        "/actuator/prometheus"
     )
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
