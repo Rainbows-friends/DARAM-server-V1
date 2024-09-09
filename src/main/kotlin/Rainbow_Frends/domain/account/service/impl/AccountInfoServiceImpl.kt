@@ -10,6 +10,9 @@ import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.global.annotation.ServiceWithTransaction
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.CachePut
+import org.springframework.cache.annotation.Cacheable
 
 @ServiceWithTransaction
 class AccountInfoServiceImpl(
@@ -20,6 +23,12 @@ class AccountInfoServiceImpl(
 
     private val logger = LoggerFactory.getLogger(AccountInfoServiceImpl::class.java)
 
+    @Cacheable(
+        value = ["accountCache"],
+        key = "T(java.lang.String).valueOf(#grade) + '-' + T(java.lang.String).valueOf(#classNum) + '-' + T(java.lang.String).valueOf(#number)",
+        cacheManager = "cacheManager",
+        condition = "#grade != null && #classNum != null && #number != null"
+    )
     override fun getAccountInfomation(grade: Byte, classNum: Byte, number: Byte): AccountInfo? {
         val studentNum: Int = ((grade * 1000) + (classNum * 100) + number)
         val accountinfo = accountRepository.findByStudentId(studentNum)
@@ -37,19 +46,16 @@ class AccountInfoServiceImpl(
             accountinfo.roomNumber,
             accountinfo.floor
         )
-        return null
     }
 
+    @Cacheable(value = ["userCache"], key = "#email", cacheManager = "cacheManager", condition = "#email != null")
     override fun getUserInfomation(email: String): UserInfo {
         val userinfo: User? = userRepository.findByEmail(email)
         if (userinfo == null) {
             logger.error("User not found with email: $email")
             throw UserNotFoundException()
         }
-
         val studentNum = userinfo.studentNum ?: throw UserNotFoundException()
-
-
         return UserInfo(
             userinfo.authority,
             userinfo.email,
@@ -58,5 +64,17 @@ class AccountInfoServiceImpl(
             studentNum.classNum.toByte(),
             studentNum.number.toByte()
         )
+    }
+
+    @CachePut(value = ["accountCache"], key = "#studentNum")
+    fun updateAccountInformation(accountInfo: AccountInfo, studentNum: Int): AccountInfo {
+        val account = accountRepository.findByStudentId(studentNum) ?: throw UserNotFoundException()
+        accountRepository.save(account)
+        return accountInfo
+    }
+
+    @CacheEvict(value = ["accountCache"], key = "#studentNum")
+    fun evictAccountCache(studentNum: Int) {
+        logger.info("Evicted account cache for student number: $studentNum")
     }
 }
