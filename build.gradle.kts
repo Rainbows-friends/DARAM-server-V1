@@ -61,6 +61,15 @@ dependencies {
     /* Database */
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 
+    /*Cache*/
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation("org.ehcache:ehcache:3.6.2")
+    implementation("javax.cache:cache-api:1.1.1")
+
+    /*JAXB*/
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+    implementation("org.glassfish.jaxb:jaxb-runtime:2.3.1")
+
     /* Testing */
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -75,4 +84,8 @@ kotlin {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-parameters")
 }
