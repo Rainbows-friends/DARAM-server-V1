@@ -1,6 +1,8 @@
 spring:
   application:
     name: DARAM-server-V1
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: ${DB_URL}
@@ -8,25 +10,21 @@ spring:
     password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      cache:
-        use_second_level_cache: true
-        use_query_cache: true
       ddl-auto: update
-      generate_statistics: true
-    javax:
-      cache:
-        provider: org.ehcache.jsr107.EhcacheCachingProvider
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
     generate-ddl: on
+  cache:
+    jcache:
+      config: classpath:ehcache.xml
+    type: jcache
   data:
     redis:
       host: ${Redis_URL}
       port: ${Redis_PORT}
-
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -67,7 +65,6 @@ management:
     web:
       exposure:
         include: prometheus
-
 GAuth-CLIENT-ID: ${GAuth_CLIENT_ID}
 GAuth-CLIENT-SECRET: ${GAuth_CLIENT_SECRET}
 GAuth-REDIRECT-URI: ${GAuth_REDIRECT_URI}
