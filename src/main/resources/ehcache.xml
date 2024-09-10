@@ -3,7 +3,7 @@
         xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
     <cache alias="accountCache">
         <expiry>
-            <ttl unit="seconds">600</ttl>
+            <ttl unit="seconds">60</ttl>
         </expiry>
         <resources>
             <heap unit="entries">1000</heap>
@@ -11,7 +11,7 @@
     </cache>
     <cache alias="userCache">
         <expiry>
-            <ttl unit="seconds">600</ttl>
+            <ttl unit="seconds">60</ttl>
         </expiry>
         <resources>
             <heap unit="entries">1000</heap>
