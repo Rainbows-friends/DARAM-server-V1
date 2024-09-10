@@ -5,6 +5,7 @@ import Rainbow_Frends.domain.account.presentation.dto.UserInfo
 import Rainbow_Frends.domain.account.presentation.dto.response.AccountDetailResponse
 import Rainbow_Frends.domain.account.service.AccountInfoService
 import Rainbow_Frends.domain.account.service.ProfilePictureService
+import Rainbow_Frends.global.auth.GetStudentId
 import Rainbow_Frends.global.auth.GetUser
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -21,7 +22,8 @@ import org.springframework.web.multipart.MultipartFile
 class AccountController(
     private val profilePictureService: ProfilePictureService,
     private val accountInfoService: AccountInfoService,
-    private val getUser: GetUser
+    private val getUser: GetUser,
+    private val studentId: GetStudentId
 ) {
     private val logger = LoggerFactory.getLogger(AccountController::class.java)
 
@@ -30,17 +32,18 @@ class AccountController(
     @PatchMapping("/profile-picture")
     fun updateProfilePicture(
         @RequestParam("file") file: MultipartFile, request: HttpServletRequest
-    ): ResponseEntity<String> {
+    ): HttpStatus {
         profilePictureService.updateProfilePicture(request, file)
-        return ResponseEntity.status(HttpStatus.CREATED).body("Profile picture updated successfully.")
+        accountInfoService.evictAccountCache(studentId.getStudentId(getUser.getUser(request).username))
+        return HttpStatus.CREATED
     }
 
     @Operation(summary = "프로필 사진 삭제 API", description = "사용자의 프로필 사진을 삭제하는 API")
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/profile-picture")
-    fun deleteProfilePicture(request: HttpServletRequest): ResponseEntity<String> {
+    fun deleteProfilePicture(request: HttpServletRequest): HttpStatus {
         profilePictureService.deleteProfilePicture(request)
-        return ResponseEntity.status(HttpStatus.OK).body("Profile picture delete successfully")
+        return HttpStatus.OK
     }
 
     @Operation(summary = "계정 정보 조회 API", description = "사용자의 계정정보를 조회하는 API")

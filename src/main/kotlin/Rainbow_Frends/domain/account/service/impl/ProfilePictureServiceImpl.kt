@@ -9,6 +9,7 @@ import Rainbow_Frends.global.auth.GetUser
 import Rainbow_Frends.global.aws.service.FileDeleteService
 import Rainbow_Frends.global.aws.service.FileUploadService
 import jakarta.servlet.http.HttpServletRequest
+import org.apache.coyote.BadRequestException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.multipart.MultipartFile
 
@@ -22,10 +23,20 @@ class ProfilePictureServiceImpl(
     private val getStudentId: GetStudentId,
 ) : ProfilePictureService {
 
+    private val allowedImageExtensions = listOf("jpg", "jpeg", "png", "gif")
     override fun updateProfilePicture(request: HttpServletRequest, file: MultipartFile) {
         val studentNum = getStudentId.getStudentId(getUser.getUser(request).username)
         val account = accountRepository.findByStudentId(studentNum)
-            ?: throw RuntimeException("학번 $studentNum 에 해당하는 Account를 찾을 수 없습니다.")
+            ?: throw RuntimeException("Could not find account for student number $studentNum.")
+        val originalFilename = file.originalFilename ?: throw BadRequestException("File name is missing.")
+        val fileExtension = originalFilename.substringAfterLast('.', "").lowercase()
+        val fileNameWithoutExtension = originalFilename.substringBeforeLast('.', "").lowercase()
+        if (fileNameWithoutExtension == "null" || fileNameWithoutExtension == "NULL") {
+            throw BadRequestException("The file name cannot be 'null' or 'NULL'.")
+        }
+        if (fileExtension !in allowedImageExtensions) {
+            throw BadRequestException("Invalid file extension. Allowed extensions: $allowedImageExtensions.")
+        }
         account.profilePictureURL?.let { existingProfilePictureUrl ->
             fileDeleteService.deleteFile(existingProfilePictureUrl)
         }
