@@ -1,6 +1,7 @@
 package Rainbow_Frends.domain.auth.controller
 
 import Rainbow_Frends.domain.account.presentation.dto.request.SignInRequest
+import Rainbow_Frends.domain.account.presentation.dto.response.CodeResponse
 import Rainbow_Frends.domain.account.presentation.dto.response.TokenResponse
 import Rainbow_Frends.domain.account.service.LogoutService
 import Rainbow_Frends.domain.account.service.ReissueTokenService
@@ -74,5 +75,18 @@ class AuthController(
     fun logout(request: HttpServletRequest): ResponseEntity<Void> {
         logoutService.execute(request.getHeader("Authorization").substring(7))
         return ResponseEntity.noContent().build()
+    }
+
+    @GetMapping("/code")
+    @Operation(summary = "쿼리 파라미터 반환", description = "GAuth 로그인 성공 후 코드를 반환해줍니다")
+    @ApiResponses(
+        value = [ApiResponse(responseCode = "200", description = "코드 반환 성공"), ApiResponse(
+            responseCode = "400",
+            description = "코드 값 오류",
+            content = [Content(schema = Schema(implementation = ErrorResponse::class))]
+        )]
+    )
+    fun getCode(@RequestParam("code") code: String): CodeResponse {
+        return CodeResponse(code)
     }
 }
