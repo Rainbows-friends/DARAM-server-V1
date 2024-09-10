@@ -1,9 +1,5 @@
 package Rainbow_Frends.domain.account.service.impl
 
-import Rainbow_Frends.domain.user.entity.Authority
-import Rainbow_Frends.domain.user.entity.StudentNum
-import Rainbow_Frends.domain.user.entity.User
-import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.domain.account.Token.RefreshToken
 import Rainbow_Frends.domain.account.entity.Account
 import Rainbow_Frends.domain.account.entity.Role
@@ -14,7 +10,12 @@ import Rainbow_Frends.domain.account.repository.jpa.AccountRepository
 import Rainbow_Frends.domain.account.repository.redis.RefreshRepository
 import Rainbow_Frends.domain.account.service.SignInService
 import Rainbow_Frends.domain.checkin.service.CheckinService
+import Rainbow_Frends.domain.user.entity.Authority
+import Rainbow_Frends.domain.user.entity.StudentNum
+import Rainbow_Frends.domain.user.entity.User
+import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.global.annotation.ServiceWithTransaction
+import Rainbow_Frends.global.auth.GetStudentId
 import Rainbow_Frends.global.security.jwt.JwtProvider
 import gauth.GAuth
 import gauth.GAuthUserInfo
@@ -28,7 +29,8 @@ class SignInServiceImpl(
     private val userRepository: UserRepository,
     private val accountRepository: AccountRepository,
     private val jwtProvider: JwtProvider,
-    private val checkinService: CheckinService
+    private val checkinService: CheckinService,
+    private val getStudentId: GetStudentId
 ) : SignInService {
 
     @Value("\${GAuth-CLIENT-ID}")
@@ -46,8 +48,7 @@ class SignInServiceImpl(
                 signInRequest.code, clientId, clientSecret, redirectUri
             )
             val userInfo = gAuth.getUserInfo(gAuthToken.accessToken)
-            val user = userRepository.findByEmail(userInfo.email) ?: saveUser(userInfo)
-            ?: throw UserNotFoundException()
+            val user = userRepository.findByEmail(userInfo.email) ?: saveUser(userInfo) ?: throw UserNotFoundException()
             val tokenResponse = user.id?.let { jwtProvider.generateTokenDto(it) } ?: throw UserNotFoundException()
             saveRefreshToken(tokenResponse, user)
             return tokenResponse
@@ -89,8 +90,8 @@ class SignInServiceImpl(
     }
 
     private fun saveAccountAndCheckin(user: User) {
-        val studentNum = user.studentNum ?: throw IllegalArgumentException("StudentNum cannot be null")
-        val studentId = (studentNum.grade * 1000) + (studentNum.classNum * 100) + studentNum.number
+        val studentId = user.email?.let { getStudentId.getStudentId(it) }
+            ?: throw IllegalArgumentException("StudentNum cannot be null")
         val account = Account().apply {
             this.studentId = studentId
             this.role = Role.ROLE_AVERAGE_STUDENT
