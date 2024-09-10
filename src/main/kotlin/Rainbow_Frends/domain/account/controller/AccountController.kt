@@ -5,6 +5,7 @@ import Rainbow_Frends.domain.account.presentation.dto.UserInfo
 import Rainbow_Frends.domain.account.presentation.dto.response.AccountDetailResponse
 import Rainbow_Frends.domain.account.service.AccountInfoService
 import Rainbow_Frends.domain.account.service.ProfilePictureService
+import Rainbow_Frends.global.auth.GetStudentId
 import Rainbow_Frends.global.auth.GetUser
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -21,7 +22,8 @@ import org.springframework.web.multipart.MultipartFile
 class AccountController(
     private val profilePictureService: ProfilePictureService,
     private val accountInfoService: AccountInfoService,
-    private val getUser: GetUser
+    private val getUser: GetUser,
+    private val studentId: GetStudentId
 ) {
     private val logger = LoggerFactory.getLogger(AccountController::class.java)
 
@@ -32,6 +34,7 @@ class AccountController(
         @RequestParam("file") file: MultipartFile, request: HttpServletRequest
     ): ResponseEntity<String> {
         profilePictureService.updateProfilePicture(request, file)
+        accountInfoService.evictAccountCache(studentId.getStudentId(getUser.getUser(request).username))
         return ResponseEntity.status(HttpStatus.CREATED).body("Profile picture updated successfully.")
     }
 
