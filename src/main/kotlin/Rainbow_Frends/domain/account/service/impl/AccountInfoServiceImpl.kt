@@ -36,7 +36,9 @@ class AccountInfoServiceImpl(
             logger.error("Account not found for student number: $studentNum")
             throw UserNotFoundException()
         }
-        accountinfo.profilePictureURL = "$bucketSubdomain/${accountinfo.profilePictureName}"
+        if (accountinfo.profilePictureURL != null) {
+            accountinfo.profilePictureURL = "$bucketSubdomain/${accountinfo.profilePictureName}"
+        }
         return AccountInfo(
             accountinfo.studentId!!.toShort(),
             accountinfo.profilePictureName,
@@ -67,14 +69,14 @@ class AccountInfoServiceImpl(
     }
 
     @CachePut(value = ["accountCache"], key = "#studentNum")
-    fun updateAccountInformation(accountInfo: AccountInfo, studentNum: Int): AccountInfo {
+    override fun updateAccountInformation(accountInfo: AccountInfo, studentNum: Int): AccountInfo {
         val account = accountRepository.findByStudentId(studentNum) ?: throw UserNotFoundException()
         accountRepository.save(account)
         return accountInfo
     }
 
     @CacheEvict(value = ["accountCache"], key = "#studentNum")
-    fun evictAccountCache(studentNum: Int) {
+    override fun evictAccountCache(studentNum: Int) {
         logger.info("Evicted account cache for student number: $studentNum")
     }
 }
