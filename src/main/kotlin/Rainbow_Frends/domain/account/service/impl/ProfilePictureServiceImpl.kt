@@ -23,7 +23,7 @@ class ProfilePictureServiceImpl(
     private val getStudentId: GetStudentId,
 ) : ProfilePictureService {
 
-    private val allowedImageExtensions = listOf("jpg", "jpeg", "png", "gif")
+    private val allowedImageExtensions = listOf("jpg", "jpeg", "png", "svg")
     override fun updateProfilePicture(request: HttpServletRequest, file: MultipartFile) {
         val studentNum = getStudentId.getStudentId(getUser.getUser(request).username)
         val account = accountRepository.findByStudentId(studentNum)
