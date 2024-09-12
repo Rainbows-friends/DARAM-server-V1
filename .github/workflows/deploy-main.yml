@@ -35,11 +35,11 @@ jobs:
                 - name: DB_USERNAME
                   value: ${{ secrets.DB_USERNAME }}
                 - name: GAuth_CLIENT_ID
-                  value: ${{ secrets.GAuth.CLIENT_ID }}
+                  value: ${{ secrets.GAUTH_CLIENT_ID }}
                 - name: GAuth_CLIENT_SECRET
-                  value: ${{ secrets.GAuth_CLIENT_SECRET }}
+                  value: ${{ secrets.GAUTH_CLIENT_SECRET }}
                 - name: GAuth_REDIRECT_URI
-                  value: ${{ secrets.GAuth_REDIRECT_URI }}
+                  value: ${{ secrets.GAUTH_REDIRECT_URI }}
                 - name: JWT_SECRET
                   value: ${{ secrets.JWT_SECRET }}
                 - name: Redis_PORT
