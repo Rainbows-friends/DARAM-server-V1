@@ -1,26 +1,23 @@
 package Rainbow_Frends.domain.checkin.service.Impl
 
-import Rainbow_Frends.domain.user.repository.UserRepository
 import Rainbow_Frends.domain.account.repository.jpa.AccountRepository
 import Rainbow_Frends.domain.checkin.entity.Checkin
 import Rainbow_Frends.domain.checkin.repository.CheckinRepository
 import Rainbow_Frends.domain.checkin.service.CheckinService
+import Rainbow_Frends.domain.user.repository.UserRepository
+import Rainbow_Frends.global.annotation.ServiceWithTransaction
 import jakarta.annotation.PostConstruct
 import org.springframework.scheduling.annotation.Scheduled
-import org.springframework.stereotype.Service
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
 
-@Service
+@ServiceWithTransaction
 class CheckinServiceImpl(
     private val userRepository: UserRepository,
     private val accountRepository: AccountRepository,
     private val checkinRepository: CheckinRepository
 ) : CheckinService {
-
-    private val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd")
 
     @PostConstruct
     override fun initializeKeys() {
