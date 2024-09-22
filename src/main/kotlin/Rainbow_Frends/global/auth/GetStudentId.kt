@@ -5,11 +5,16 @@ import org.springframework.stereotype.Component
 
 @Component
 class GetStudentId(private val userRepository: UserRepository) {
-    fun getStudentId(email:String): Int {
-        val user = email.let { userRepository.findByEmail(it) } ?: throw RuntimeException("이메일로 사용자를 찾을 수 없습니다: $email")
-        val studentNum = user.studentNum?.let {
-            (it.grade * 1000) + (it.classNum * 100) + it.number
-        } ?: throw RuntimeException("유효하지 않은 학번 정보입니다.")
+    fun getStudentId(email: String): Int {
+        val user =
+            email.let { userRepository.findByEmail(it) } ?: throw RuntimeException("User not found by email: $email")
+        val studentNum = user.studentNum?.generateStudentId()
+        if (studentNum == null) {
+            throw RuntimeException("Student number is null for user with email: $email")
+        }
+        if (studentNum <= 1100 || studentNum >= 3419) {
+            throw RuntimeException("Student number out of valid range (1101-3418): $studentNum")
+        }
         return studentNum
     }
 }
