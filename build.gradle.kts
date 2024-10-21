@@ -45,7 +45,7 @@ dependencies {
 
     /* GAuth */
     implementation("com.github.YangSiJun528:GAuth-spring-boot-starter:3.0.0")
-    implementation("com.github.GSM-MSG:GAuth-SDK-Java:v3.0.0")
+    implementation("com.github.GSM-MSG:GAuth-SDK-Java:v3.0.1")
 
     /* Thymeleaf Extras */
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
@@ -73,6 +73,7 @@ dependencies {
     /* Testing */
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    runtimeOnly("com.h2database:h2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

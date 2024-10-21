@@ -49,10 +49,12 @@ class ProfilePictureServiceImpl(
     override fun deleteProfilePicture(request: HttpServletRequest) {
         val studentNum = getStudentId.getStudentId(getUser.getUser(request).username)
         val account: Account? = accountRepository.findByStudentId(studentNum)
-        account?.let {
+        fileDeleteService.deleteFile(account?.profilePictureURL ?: throw BadRequestException("Profile picture URL is missing."))
+        account.let {
             it.profilePictureURL = null
             it.profilePictureName = null
             accountRepository.save(it)
         }
+
     }
 }
