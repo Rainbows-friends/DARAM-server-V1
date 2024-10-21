@@ -18,7 +18,7 @@ import Rainbow_Frends.global.annotation.ServiceWithTransaction
 import Rainbow_Frends.global.auth.GetStudentId
 import Rainbow_Frends.global.security.jwt.JwtProvider
 import gauth.GAuth
-import gauth.GAuthUserInfo
+import gauth.response.GAuthUserInfo
 import gauth.exception.GAuthException
 import org.springframework.beans.factory.annotation.Value
 
